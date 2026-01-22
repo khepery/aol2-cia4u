@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLS Economics CIA4U - Assessment Hub</title>
+  <meta name="description" content="Central hub for Economics CIA4U Assessment of Learning assignments">
+  <meta name="keywords" content="economics, education, assessment, MLS, CIA4U">
+
+  <!-- External Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    /* Enhanced Global Variables & Animated Background */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --accent-color: #FFC107;
+      --dark-color: #333;
+      --light-color: #f0f9ff;
+      --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --chinese-color: #666;
+      --dark-chinese-color: #aaa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(-45deg, #f0f9ff, #e3f2fd, #f4f4f9, #e8f5e9);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      margin: 0;
+      padding: 0;
+      color: var(--dark-color);
+      min-height: 100vh;
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Enhanced Loading Animation */
+    .loading-spinner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-spinner.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Chinese Translation Support */
+    .chinese {
+      display: block;
+      font-size: 0.85em;
+      color: var(--chinese-color);
+      margin-top: 3px;
+      font-weight: 400;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    .dark-mode .chinese {
+      color: var(--dark-chinese-color);
+    }
+
+    /* Enhanced Header with Animation */
+    header {
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+      position: relative;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .header-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .school-logo {
+      display: inline-block;
+      margin-right: 15px;
+      vertical-align: middle;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 2.8rem;
+      font-weight: 800;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-subtitle {
+      margin: 0.5rem 0 0;
+      font-size: 1.3rem;
+      opacity: 0.95;
+      font-weight: 400;
+    }
+
+    #darkModeToggle {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #darkModeToggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* Enhanced Main Content Container */
+    .container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Enhanced Welcome Section */
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 4rem;
+      background: white;
+      padding: 3rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    }
+
+    .welcome-title {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-description {
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.8;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .welcome-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Enhanced Progress Indicator */
+    .course-progress {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-title {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar-container {
+      background: #f0f0f0;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 6px;
+      transition: width 1s ease;
+      position: relative;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: progressShimmer 2s infinite;
+    }
+
+    @keyframes progressShimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .progress-text {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Enhanced AOL Cards Grid */
+    .aol-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .aol-card {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      animation: slideInUp 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .aol-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .aol-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .aol-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .aol-card:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .aol-card:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .aol-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .aol-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .aol-card:hover::before {
+      opacity: 1;
+    }
+
+    .aol-header {
+      background: var(--secondary-color);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .aol-header::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: var(--transition);
+    }
+
+    .aol-card:hover .aol-header::after {
+      animation: headerSweep 0.6s ease;
+    }
+
+    @keyframes headerSweep {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    .aol-title {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aol-subtitle {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aol-content {
+      padding: 2rem;
+    }
+
+    .aol-description {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* Enhanced Tags */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+      color: #555;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
+      border: 1px solid #e0e0e0;
+    }
+
+    .tag:hover {
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Enhanced Status Container */
+    .status-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-badge {
+      background: linear-gradient(135deg, #d4edda, #c8e6c9);
+      color: #1e7e34;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .status-badge.pending {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      color: #8a6d3b;
+    }
+
+    .status-badge.coming-soon {
+      background: linear-gradient(135deg, #cce7ff, #b3d9ff);
+      color: #0056b3;
+    }
+
+    .difficulty-indicator {
+      display: flex;
+      align-items: center;
+    }
+
+    .difficulty-stars {
+      color: var(--accent-color);
+      margin-left: 0.5rem;
+    }
+
+    /* Enhanced CTA Button */
+    .cta-button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      background: linear-gradient(135deg, #45a049, var(--primary-color));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .cta-button.secondary {
+      background: linear-gradient(135deg, var(--secondary-color), #42a5f5);
+    }
+
+    .cta-button.secondary:hover {
+      background: linear-gradient(135deg, #1976D2, var(--secondary-color));
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+    }
+
+    .cta-button.disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .cta-button.disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Enhanced Timeline Section */
+    .timeline-section {
+      margin-bottom: 4rem;
+      background: white;
+      padding: 3rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .timeline-title {
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -2px;
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      padding: 15px 50px;
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+      animation: timelineSlide 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes timelineSlide {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border: 4px solid var(--accent-color);
+      top: 22px;
+      border-radius: 50%;
+      z-index: 1;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+
+    .timeline-item:hover::after {
+      transform: scale(1.2);
+      border-color: var(--primary-color);
+    }
+
+    .timeline-item.left {
+      left: 0;
+      transform: translateX(-50px);
+    }
+
+    .timeline-item.right {
+      left: 50%;
+      transform: translateX(50px);
+    }
+
+    .timeline-item.left::after {
+      right: -14px;
+    }
+
+    .timeline-item.right::after {
+      left: -14px;
+    }
+
+    .timeline-content {
+      padding: 20px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .timeline-content:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .timeline-date {
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-content h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--dark-color);
+    }
+
+    .timeline-content p {
+      margin: 0.3rem 0;
+      color: #666;
+    }
+
+    /* Enhanced Resources Section */
+    .resources-section {
+      margin-bottom: 4rem;
+    }
+
+    .resources-title {
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .resource-card {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: resourceFloat 0.8s ease forwards;
+      animation-delay: calc(var(--index, 0) * 0.1s);
+      opacity: 0;
+    }
+
+    @keyframes resourceFloat {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .resource-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .resource-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .resource-icon {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .resource-card:hover .resource-icon {
+      transform: scale(1.1) rotate(5deg);
+      color: var(--primary-color);
+    }
+
+    .resource-title {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .resource-description {
+      margin-bottom: 1.5rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .resource-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.8rem 1.5rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 25px;
+      transition: var(--transition);
+      background: transparent;
+    }
+
+    .resource-link:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .resource-link i {
+      margin-left: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .resource-link:hover i {
+      transform: translateX(5px);
+    }
+
+    /* Scroll to Top Button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      z-index: 1000;
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .scroll-to-top:hover {
+      background: linear-gradient(135deg, #45a049, var(--primary-color));
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .scroll-to-top:active {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .scroll-to-top i {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-8px);
+      }
+
+      60% {
+        transform: translateY(-4px);
+      }
+    }
+
+    /* Enhanced Footer */
+    footer {
+      background: linear-gradient(135deg, var(--dark-color), #424242);
+      color: white;
+      text-align: center;
+      padding: 3rem 0 2rem;
+      margin-top: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    }
+
+    .footer-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-logo {
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-logo h3 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-description {
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-links {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer-links a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .footer-links a i {
+      margin-right: 0.5rem;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .social-link:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px) scale(1.1);
+    }
+
+    /* Enhanced Dark Mode Styles */
+    .dark-mode {
+      background: linear-gradient(-45deg, #1a1a1a, #2d2d2d, #1f1f1f, #2a2a2a);
+      background-size: 400% 400%;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .welcome-section,
+    .dark-mode .timeline-section,
+    .dark-mode .course-progress {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .aol-card,
+    .dark-mode .resource-card,
+    .dark-mode .timeline-content {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark-mode .resource-title,
+    .dark-mode .timeline-content h3 {
+      color: #f0f0f0;
+    }
+
+    .dark-mode .resource-description,
+    .dark-mode .timeline-content p,
+    .dark-mode .aol-description {
+      color: #b0b0b0;
+    }
+
+    .dark-mode .tag {
+      background: linear-gradient(135deg, #404040, #353535);
+      color: #ddd;
+      border-color: #555;
+    }
+
+    .dark-mode .tag:hover {
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+    }
+
+    .dark-mode .timeline::after {
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    }
+
+    .dark-mode .timeline-item::after {
+      background-color: #2a2a2a;
+      border-color: var(--accent-color);
+    }
+
+    .dark-mode .progress-bar-container {
+      background: #404040;
+    }
+
+    .dark-mode .status-badge {
+      background: linear-gradient(135deg, #2d5a3d, #3e7b4d);
+      color: #a5d6a7;
+    }
+
+    .dark-mode .status-badge.pending {
+      background: linear-gradient(135deg, #5a4d2d, #7b6d3e);
+      color: #ffd54f;
+    }
+
+    .dark-mode .status-badge.coming-soon {
+      background: linear-gradient(135deg, #2d4d5a, #3e6d7b);
+      color: #81d4fa;
+    }
+
+    .dark-mode footer {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    }
+
+    .dark-mode .scroll-to-top {
+      background: linear-gradient(135deg, var(--secondary-color), #42a5f5);
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .scroll-to-top:hover {
+      background: linear-gradient(135deg, #1976D2, var(--secondary-color));
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    /* Remove outline on button click */
+    #darkModeToggle:focus {
+      outline: none;
+    }
+
+    /* Optional: Add a subtle focus indicator */
+    #darkModeToggle:focus-visible {
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 1200px) {
+      .container {
+        max-width: 100%;
+        padding: 0 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 2.2rem;
+      }
+
+      .header-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .welcome-section {
+        padding: 2rem;
+      }
+
+      .welcome-title {
+        font-size: 2rem;
+      }
+
+      .welcome-stats {
+        gap: 1.5rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+      }
+
+      .timeline::after {
+        left: 31px;
+      }
+
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+        transform: translateY(30px);
+      }
+
+      .timeline-item.right {
+        left: 0;
+      }
+
+      .timeline-item.left::after,
+      .timeline-item.right::after {
+        left: 18px;
+      }
+
+      .aol-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 0 1rem;
+      }
+
+      .welcome-section,
+      .timeline-section,
+      .course-progress {
+        padding: 1.5rem;
+      }
+
+      .aol-content,
+      .resource-card {
+        padding: 1.5rem;
+      }
+
+      .header-title {
+        font-size: 1.8rem;
+      }
+
+      .welcome-title,
+      .timeline-title,
+      .resources-title {
+        font-size: 1.8rem;
+      }
+
+      .social-links {
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Accessibility Enhancements */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus states for better accessibility */
+    button:focus,
+    a:focus {
+      outline: 3px solid var(--accent-color);
+      outline-offset: 2px;
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      :root {
+        --primary-color: #000;
+        --secondary-color: #000;
+        --dark-color: #000;
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Dark Mode Modal Styles */
+    .dark-mode .modal-content {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .unit-item,
+    .dark-mode .contact-method,
+    .dark-mode .contact-instructions,
+    .dark-mode .tip-category {
+      background-color: #3a3a3a;
+    }
+
+    .dark-mode .close-modal {
+      color: #ccc;
+    }
+
+    .dark-mode .close-modal:hover {
+      color: #fff;
+    }
+
+    /* Responsive Modal Styles */
+    @media (max-width: 768px) {
+      .modal-content {
+        margin: 2% auto;
+        padding: 20px;
+        width: 95%;
+      }
+
+      .contact-method {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .contact-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+  </div>
+
+  <header>
+    <div class="header-container">
+      <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌓</button>
+      <span class="school-logo">🎓</span>
+      <h1 class="header-title">MLS Economics CIA4U</h1>
+      <span class="chinese">MLS经济学CIA4U</span>
+      <p class="header-subtitle">Ontario School Maple Leaf | Assessment of Learning Hub</p>
+      <span class="chinese">安大略省枫叶学校 | 学习评估中心</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+      <h2 class="welcome-title">Welcome to the Economics Assessment Hub</h2>
+      <span class="chinese">欢迎来到经济学评估中心</span>
+      <p class="welcome-description">
+        This hub provides access to all Assessment of Learning (AOL) assignments for the CIA4U Economics program.
+        Each AOL focuses on different economics concepts and skills, helping you develop a comprehensive understanding
+        of both micro and macroeconomics principles. Use this central hub to access all assignment tools, track your
+        progress, and find relevant resources.
+      </p>
+      <span class="chinese">
+        此中心提供CIA4U经济学课程所有学习评估(AOL)作业的访问。每个AOL专注于不同的经济概念和技能，帮助您全面理解微观和宏观经济学原理。使用此中心访问所有作业工具、跟踪进度并找到相关资源。
+      </span>
+
+      <div class="welcome-stats">
+        <div class="stat-item">
+          <span class="stat-number">5</span>
+          <span class="stat-label">AOL Assignments</span>
+          <span class="chinese">AOL作业</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">75%</span>
+          <span class="stat-label">Course Weight</span>
+          <span class="chinese">课程权重</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <span class="stat-label">Study Hours</span>
+          <span class="chinese">学习时间</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Progress -->
+    <section class="course-progress">
+      <div class="progress-header">
+        <h3 class="progress-title">Course Progress</h3>
+        <span class="chinese">课程进度</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" style="width: 100%" id="courseProgressBar"></div>
+      </div>
+      <p class="progress-text">5 of 5 AOLs Available | <span class="chinese">5个AOL中的3个可用</span></p>
+    </section>
+
+    <!-- AOL Cards Grid -->
+    <section class="aol-grid-section">
+      <div class="aol-grid">
+        <!-- AOL #1 Card -->
+        <div class="aol-card" style="--index: 0">
+          <div class="aol-header" style="background: linear-gradient(135deg, #4CAF50, #66bb6a);">
+            <h3 class="aol-title">AOL #1</h3>
+            <p class="aol-subtitle">Unit 1 Assessment</p>
+            <span class="chinese">单元1评估</span>
+          </div>
+          <div class="aol-content">
+            <p class="aol-description">
+              Exploring economic principles through analysis of market structures, consumer behavior, and supply/demand
+              dynamics. Build foundational understanding of microeconomic concepts.
+            </p>
+            <span class="chinese">
+              通过分析市场结构、消费者行为和供需动态探索经济原理。建立微观经济概念的基础理解。
+            </span>
+            <div class="tag-container">
+              <span class="tag">Microeconomics | <span class="chinese">微观经济学</span></span>
+              <span class="tag">Market Analysis | <span class="chinese">市场分析</span></span>
+              <span class="tag">15% of Grade | <span class="chinese">占15%成绩</span></span>
+            </div>
+            <div class="status-container">
+              <span class="status-badge">Available | <span class="chinese">可用</span></span>
+              <div class="difficulty-indicator">
+                <span>Difficulty | <span class="chinese">难度</span></span>
+                <span class="difficulty-stars">★★☆☆☆</span>
+              </div>
+            </div>
+            <a href="aol1.html" class="cta-button">
+              <i class="fas fa-rocket"></i> Launch Planner
+              <span class="chinese">启动规划器</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- AOL #2 Card -->
+        <div class="aol-card" style="--index: 1">
+          <div class="aol-header" style="background: linear-gradient(135deg, #2196F3, #42a5f5);">
+            <h3 class="aol-title">AOL #2</h3>
+            <p class="aol-subtitle">Unit 2 Assessment</p>
+            <span class="chinese">单元2评估</span>
+          </div>
+          <div class="aol-content">
+            <p class="aol-description">
+              Analyze economic inequality through opinion columns, academic essays, and comprehensive cost-benefit
+              analysis. Develop critical thinking skills for policy evaluation.
+            </p>
+            <span class="chinese">
+              通过观点专栏、学术论文和综合成本效益分析来分析经济不平等。培养政策评估的批判性思维技能。
+            </span>
+            <div class="tag-container">
+              <span class="tag">Economic Analysis | <span class="chinese">经济分析</span></span>
+              <span class="tag">Cost-Benefit | <span class="chinese">成本效益</span></span>
+              <span class="tag">15% of Grade | <span class="chinese">占15%成绩</span></span>
+            </div>
+            <div class="status-container">
+              <span class="status-badge">Available | <span class="chinese">可用</span></span>
+              <div class="difficulty-indicator">
+                <span>Difficulty | <span class="chinese">难度</span></span>
+                <span class="difficulty-stars">★★★☆☆</span>
+              </div>
+            </div>
+            <a href="aol2.html" class="cta-button">
+              <i class="fas fa-chart-line"></i> Launch Planner
+              <span class="chinese">启动规划器</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- AOL #3 Card -->
+        <div class="aol-card" style="--index: 2">
+          <div class="aol-header" style="background: linear-gradient(135deg, #FF9800, #ffb74d);">
+            <h3 class="aol-title">AOL #3</h3>
+            <p class="aol-subtitle">Unit 3 Assessment</p>
+            <span class="chinese">单元3评估</span>
+          </div>
+          <div class="aol-content">
+            <p class="aol-description">
+              Research on "The Future of Money" by Neha Narula, reflecting on monetary policy and analyzing money supply
+              effects. Explore digital currency and fintech innovations.
+            </p>
+            <span class="chinese">
+              研究尼哈·纳鲁拉的《货币的未来》，反思货币政策并分析货币供应效应。探索数字货币和金融科技创新。
+            </span>
+            <div class="tag-container">
+              <span class="tag">Monetary Policy | <span class="chinese">货币政策</span></span>
+              <span class="tag">Economic Research | <span class="chinese">经济研究</span></span>
+              <span class="tag">15% of Grade | <span class="chinese">占15%成绩</span></span>
+            </div>
+            <div class="status-container">
+              <span class="status-badge">Available | <span class="chinese">可用</span></span>
+              <div class="difficulty-indicator">
+                <span>Difficulty | <span class="chinese">难度</span></span>
+                <span class="difficulty-stars">★★★☆☆</span>
+              </div>
+            </div>
+            <a href="aol3.html" class="cta-button">
+              <i class="fas fa-book-open"></i> Launch Planner
+              <span class="chinese">启动规划器</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- AOL #4 Card -->
+        <div class="aol-card" style="--index: 3">
+          <div class="aol-header" style="background: linear-gradient(135deg, #3f51b5, #5c6bc0);">
+            <h3 class="aol-title">AOL #4</h3>
+            <p class="aol-subtitle">Unit 4 Assessment</p>
+            <span class="chinese">单元4评估</span>
+          </div>
+          <div class="aol-content">
+            <p class="aol-description">
+              Investigate the global market impact of the Subprime Mortgage Crisis (2007-2009) on a major multinational
+              corporation. Apply economic theories to real-world financial analysis.
+            </p>
+            <span class="chinese">
+              调查次贷危机（2007-2009）对大型跨国公司的全球市场影响。将经济理论应用于现实世界的金融分析。
+            </span>
+            <div class="tag-container">
+              <span class="tag">Financial Crisis | <span class="chinese">金融危机</span></span>
+              <span class="tag">Corporate Analysis | <span class="chinese">企业分析</span></span>
+              <span class="tag">15% of Grade | <span class="chinese">占15%成绩</span></span>
+            </div>
+            <div class="status-container">
+              <span class="status-badge">Available | <span class="chinese">可用</span></span>
+              <div class="difficulty-indicator">
+                <span>Difficulty | <span class="chinese">难度</span></span>
+                <span class="difficulty-stars">★★★★☆</span>
+              </div>
+            </div>
+            <a href="aol4.html" class="cta-button">
+              <i class="fas fa-search"></i> Launch Planner
+              <span class="chinese">启动规划器</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- AOL #5 Card -->
+        <div class="aol-card" style="--index: 4">
+          <div class="aol-header" style="background: linear-gradient(135deg, #9C27B0, #ba68c8);">
+            <h3 class="aol-title">AOL #5</h3>
+            <p class="aol-subtitle">Unit 5 Assessment</p>
+            <span class="chinese">单元5评估</span>
+          </div>
+          <div class="aol-content">
+            <p class="aol-description">
+              Final Interview Project - Conduct an interview with a famous economist addressing global inequality
+              concerns from their perspective. Synthesize course learning into creative presentation.
+            </p>
+            <span class="chinese">
+              最终访谈项目 - 与著名经济学家进行访谈，从他们的角度讨论全球不平等问题。将课程学习综合成创意演示。
+            </span>
+            <div class="tag-container">
+              <span class="tag">Interview Project | <span class="chinese">访谈项目</span></span>
+              <span class="tag">Global Inequality | <span class="chinese">全球不平等</span></span>
+              <span class="tag">10% of Grade | <span class="chinese">占10%成绩</span></span>
+            </div>
+            <div class="status-container">
+              <span class="status-badge">Available | <span class="chinese">可用</span></span>
+              <div class="difficulty-indicator">
+                <span>Difficulty | <span class="chinese">难度</span></span>
+                <span class="difficulty-stars">★★★★★</span>
+              </div>
+            </div>
+            <a href="aol5.html" class="cta-button">
+              <i class="fas fa-microphone"></i> Launch Planner
+              <span class="chinese">启动规划器</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Enhanced Timeline Section -->
+    <section class="timeline-section">
+      <h2 class="timeline-title">Course Timeline & Important Dates</h2>
+      <span class="chinese">课程时间线和重要日期</span>
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Unit 1</h3>
+            <span class="chinese">单元1</span>
+            <h4>Microeconomics Fundamentals</h4>
+            <span class="chinese">微观经济学基础</span>
+            <p>Market structures and consumer behavior</p>
+            <span class="chinese">市场结构和消费者行为</span>
+            <p><strong>AOL #1 due at the end of Unit 1</strong></p>
+            <span class="chinese"><strong>AOL #1在单元1结束时到期</strong></span>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Unit 2</h3>
+            <span class="chinese">单元2</span>
+            <h4>Economic Inequality Analysis</h4>
+            <span class="chinese">经济不平等分析</span>
+            <p>Policy evaluation and cost-benefit analysis</p>
+            <span class="chinese">政策评估和成本效益分析</span>
+            <p><strong>AOL #2 due at the end of Unit 2</strong></p>
+            <span class="chinese"><strong>AOL #2在单元2结束时到期</strong></span>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Unit 3</h3>
+            <span class="chinese">单元3</span>
+            <h4>Monetary Policy & Digital Currency</h4>
+            <span class="chinese">货币政策和数字货币</span>
+            <p>Future of money and economic impact</p>
+            <span class="chinese">货币的未来和经济影响</span>
+            <p><strong>AOL #3 due at the end of Unit 3</strong></p>
+            <span class="chinese"><strong>AOL #3在单元3结束时到期</strong></span>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Unit 4</h3>
+            <span class="chinese">单元4</span>
+            <h4>Financial Crisis Investigation</h4>
+            <span class="chinese">金融危机调查</span>
+            <p>Subprime mortgage crisis and global impacts</p>
+            <span class="chinese">次贷危机和全球影响</span>
+            <p><strong>AOL #4 due at the end of Unit 4</strong></p>
+            <span class="chinese"><strong>AOL #4在单元4结束时到期</strong></span>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Unit 5</h3>
+            <span class="chinese">单元5</span>
+            <h4>Global Economic Systems</h4>
+            <span class="chinese">全球经济体系</span>
+            <p>Interview project with economist</p>
+            <span class="chinese">与经济学家的访谈项目</span>
+            <p><strong>AOL #5 due at the end of Unit 5</strong></p>
+            <span class="chinese"><strong>AOL #5在单元5结束时到期</strong></span>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3 class="timeline-date">Final Exam</h3>
+            <span class="chinese">期末考试</span>
+            <h4>Comprehensive Assessment</h4>
+            <span class="chinese">综合评估</span>
+            <p>Written test covering all units</p>
+            <span class="chinese">涵盖所有单元的书面测试</span>
+            <p><strong>Due at course completion</strong></p>
+            <span class="chinese"><strong>课程完成时到期</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced Resources Section -->
+    <section class="resources-section">
+      <h2 class="resources-title">Helpful Resources</h2>
+      <span class="chinese">有用资源</span>
+      <div class="resources-grid">
+        <div class="resource-card" style="--index: 0">
+          <div class="resource-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <h3 class="resource-title">Economics Now Textbook</h3>
+          <span class="chinese">经济学现在教科书</span>
+          <p class="resource-description">
+            The primary textbook for this course. Ensure you cite this properly in your assignments using APA format.
+          </p>
+          <span class="chinese">
+            本课程的主要教科书。确保您在作业中使用APA格式正确引用此书。
+          </span>
+          <a href="economics_textbook.pdf" class="resource-link">
+            <i class="fas fa-download"></i> Access Digital Version
+            <span class="chinese">访问数字版本</span>
+          </a>
+        </div>
+
+        <div class="resource-card" style="--index: 1">
+          <div class="resource-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="resource-title">APA Citation Guide</h3>
+          <span class="chinese">APA引用指南</span>
+          <p class="resource-description">
+            Learn proper academic citation formats required for all AOL assignments. Includes economics-specific
+            examples.
+          </p>
+          <span class="chinese">
+            学习所有AOL作业所需的正确学术引用格式。包括经济学特定示例。
+          </span>
+          <a href="APA Guide.html" class="resource-link">
+            <i class="fas fa-external-link-alt"></i> View Guide
+            <span class="chinese">查看指南</span>
+          </a>
+        </div>
+
+        <div class="resource-card" style="--index: 2">
+          <div class="resource-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="resource-title">Economic Data Portal</h3>
+          <span class="chinese">经济数据门户</span>
+          <p class="resource-description">
+            Access current economic data and statistics to support your analyses. Includes FRED, World Bank, and
+            Canadian data.
+          </p>
+          <span class="chinese">
+            访问当前经济数据和统计信息以支持您的分析。包括FRED、世界银行和加拿大数据。
+          </span>
+          <a href="Economic-Data-Portal.html" class="resource-link">
+            <i class="fas fa-database"></i> Explore Data
+            <span class="chinese">探索数据</span>
+          </a>
+        </div>
+
+        <div class="resource-card" style="--index: 3">
+          <div class="resource-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3 class="resource-title">Assessment Rubrics</h3>
+          <span class="chinese">评估标准</span>
+          <p class="resource-description">
+            Review the KUTAC rubrics used to evaluate all your assignments. Understand expectations before you start.
+          </p>
+          <span class="chinese">
+            查看用于评估所有作业的KUTAC标准。在开始之前了解期望。
+          </span>
+          <a href="KUTAC-Rubrics.html" class="resource-link">
+            <i class="fas fa-clipboard-check"></i> Download Rubrics
+            <span class="chinese">下载标准</span>
+          </a>
+        </div>
+
+        <div class="resource-card" style="--index: 4">
+          <div class="resource-icon">
+            <i class="fas fa-video"></i>
+          </div>
+          <h3 class="resource-title">Economics Video Library</h3>
+          <span class="chinese">经济学视频库</span>
+          <p class="resource-description">
+            Access curated video content to supplement your learning. TED Talks, documentary clips, and expert
+            interviews.
+          </p>
+          <span class="chinese">
+            访问精选视频内容以补充您的学习。TED演讲、纪录片片段和专家访谈。
+          </span>
+          <a href="video-library.html" class="resource-link">
+            <i class="fas fa-play"></i> Watch Videos
+            <span class="chinese">观看视频</span>
+          </a>
+        </div>
+
+        <div class="resource-card" style="--index: 5">
+          <div class="resource-icon">
+            <i class="fas fa-calculator"></i>
+          </div>
+          <h3 class="resource-title">Economics Calculator Tools</h3>
+          <span class="chinese">经济学计算工具</span>
+          <p class="resource-description">
+            Interactive calculators for elasticity, GDP, inflation, and other economic calculations needed for
+            assignments.
+          </p>
+          <span class="chinese">
+            弹性、GDP、通胀和作业所需其他经济计算的交互式计算器。
+          </span>
+          <a href="calculator-tools.html" class="resource-link">
+            <i class="fas fa-arrow-right"></i> Use Tools
+            <span class="chinese">使用工具</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Enhanced Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>🎓 MLS Economics CIA4U</h3>
+        <span class="chinese">🎓 MLS经济学CIA4U</span>
+      </div>
+      <p class="footer-description">
+        Empowering students to understand and analyze economic principles through comprehensive assessments and
+        practical applications.
+      </p>
+      <span class="chinese">
+        通过综合评估和实际应用，使学生能够理解和分析经济原理。
+      </span>
+
+      <div class="footer-links">
+        <a href="#" id="studyTipsLink"><i class="fas fa-lightbulb"></i> Study Tips <span class="chinese">学习技巧</span></a>
+        <a href="#" id="courseOutlineLink"><i class="fas fa-file-pdf"></i> Course Outline <span class="chinese">课程大纲</span></a>
+        <a href="#" id="contactInstructorLink"><i class="fas fa-comments"></i> Contact Instructor <span class="chinese">联系老师</span></a>
+        <a href="#" id="officeHoursLink"><i class="fas fa-calendar"></i> Office Hours <span class="chinese">办公时间</span></a>
+        <a href="#" id="faqLink"><i class="fas fa-question-circle"></i> FAQ <span class="chinese">常见问题</span></a>
+      </div>
+
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" class="social-link" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="social-link" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="#" class="social-link" aria-label="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Maple Leaf School. All rights reserved. | <span class="chinese">保留所有权利</span></p>
+        <p>Designed with ❤️ for Economics Education | <span class="chinese">专为经济学教育设计</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Course Outline Modal -->
+  <div id="courseOutlineModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeCourseOutlineModal">&times;</span>
+      <h2 class="modal-title">Course Outline</h2>
+      <span class="chinese">课程大纲</span>
+      <div class="modal-body">
+        <h3>Unit 1: Microeconomics Fundamentals</h3>
+        <span class="chinese">单元1：微观经济学基础</span>
+        <p>Introduction to microeconomics, supply and demand, market structures.</p>
+        <span class="chinese">微观经济学导论，供需，市场结构。</span>
+        <h3>Unit 2: Economic Inequality Analysis</h3>
+        <span class="chinese">单元2：经济不平等分析</span>
+        <p>Exploration of economic inequality, policy evaluation, and cost-benefit analysis.</p>
+        <span class="chinese">经济不平等、政策评估和成本效益分析的探索。</span>
+        <h3>Unit 3: Monetary Policy & Digital Currency</h3>
+        <span class="chinese">单元3：货币政策和数字货币</span>
+        <p>Monetary policy tools, central banking, and the rise of digital currencies.</p>
+        <span class="chinese">货币政策工具、中央银行和数字货币的兴起。</span>
+        <h3>Unit 4: Financial Crisis Investigation</h3>
+        <span class="chinese">单元4：金融危机调查</span>
+        <p>Case study of the Subprime Mortgage Crisis and its global impact.</p>
+        <span class="chinese">次贷危机的案例研究及其全球影响。</span>
+        <h3>Unit 5: Global Economic Systems</h3>
+        <span class="chinese">单元5：全球经济体系</span>
+        <p>Analysis of global economic systems, trade, and international finance.</p>
+        <span class="chinese">全球经济体系、贸易和国际金融的分析。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Instructor Modal -->
+  <div id="contactModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeContactModal">&times;</span>
+      <h2 class="modal-title">Contact Instructor</h2>
+      <span class="chinese">联系老师</span>
+      <div class="modal-body">
+        <p>If you have any questions or concerns, feel free to reach out to your instructor.</p>
+        <span class="chinese">如果您有任何问题或疑虑，请随时与您的老师联系。</span>
+        <h3>Instructor Contact Information</h3>
+        <span class="chinese">教师联系信息</span>
+        <p>Email: <a href="mailto:instructor@example.com">instructor@example.com</a></p>
+        <span class="chinese">电子邮件：<a href="mailto:instructor@example.com">instructor@example.com</a></span>
+        <p>Office Hours: Monday - Friday, 9:00 AM - 4:00 PM</p>
+        <span class="chinese">办公时间：周一至周五，上午9:00 - 下午4:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Study Tips Modal -->
+  <div id="studyTipsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeStudyTipsModal">&times;</span>
+      <h2 class="modal-title">Study Tips</h2>
+      <span class="chinese">学习技巧</span>
+      <div class="modal-body">
+        <h3>Effective Study Strategies</h3>
+        <span class="chinese">有效的学习策略</span>
+        <ul>
+          <li>Review your notes regularly.</li>
+          <span class="chinese">定期复习笔记。</span>
+          <li>Practice past exam papers.</li>
+          <span class="chinese">练习以前的考试试卷。</span>
+          <li>Form a study group with classmates.</li>
+          <span class="chinese">与同学组建学习小组。</span>
+          <li>Utilize online resources and libraries.</li>
+          <span class="chinese">利用在线资源和图书馆。</span>
+        </ul>
+        <h3>Time Management Tips</h3>
+        <span class="chinese">时间管理技巧</span>
+        <ul>
+          <li>Create a study schedule and stick to it.</li>
+          <span class="chinese">制定学习计划并坚持执行。</span>
+          <li>Set specific goals for each study session.</li>
+          <span class="chinese">为每个学习时段设定具体目标。</span>
+          <li>Take regular breaks to avoid burnout.</li>
+          <span class="chinese">定期休息以避免疲劳。</span>
+          <li>Review and adjust your schedule as needed.</li>
+          <span class="chinese">根据需要审查和调整您的时间表。</span>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced JavaScript with Modern Features
+
+    // DOM Elements
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const courseProgressBar = document.getElementById('courseProgressBar');
+
+    // State management
+    const state = {
+      darkMode: false,
+      scrollPosition: 0,
+      animationSpeed: 1
+    };
+
+    // Utility Functions
+    const utils = {
+      // Debounce function for performance optimization
+      debounce: (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      },
+
+      // Throttle function for scroll events
+      throttle: (func, limit) => {
+        let inThrottle;
+        return function (...args) {
+          if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+          }
+        };
+      },
+
+      // Check if element is in viewport
+      isInViewport: (element) => {
+        const rect = element.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      },
+
+      // Animate counter numbers
+      animateCounters: () => {
+        const counters = document.querySelectorAll('.stat-number');
+        counters.forEach(counter => {
+          const target = parseInt(counter.textContent);
+          const isPercentage = counter.textContent.includes('%');
+          let current = 0;
+          const increment = target / 20;
+          const duration = 2000;
+          const stepTime = duration / 20;
+
+          const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+              counter.textContent = Math.floor(current) + (isPercentage ? '%' : '');
+              setTimeout(updateCounter, stepTime);
+            } else {
+              counter.textContent = target + (isPercentage ? '%' : '');
+            }
+          };
+          updateCounter();
+        });
+      }
+    };
+
+    // Dark Mode Management
+    const darkModeManager = {
+    init: () => {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        // Check saved preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        }
+
+        // Add click event listener
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.textContent = '🌓';
+            }
+        });
+    }
+};
+    // Scroll Management
+    const scrollManager = {
+      init: () => {
+        window.addEventListener('scroll', utils.throttle(scrollManager.handleScroll, 16));
+        scrollToTopBtn.addEventListener('click', scrollManager.scrollToTop);
+      },
+
+      handleScroll: () => {
+        state.scrollPosition = window.pageYOffset;
+
+        // Show/hide scroll to top button
+        if (state.scrollPosition > 300) {
+          scrollToTopBtn.classList.add('visible');
+        } else {
+          scrollToTopBtn.classList.remove('visible');
+        }
+
+        // Parallax effect for header
+        const header = document.querySelector('header');
+        if (header) {
+          const scrolled = state.scrollPosition;
+          const parallax = scrolled * 0.5;
+          header.style.transform = `translateY(${parallax}px)`;
+        }
+
+        // Animate timeline items
+        scrollManager.animateTimelineItems();
+      },
+
+      scrollToTop: () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      },
+
+      animateTimelineItems: () => {
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+          if (utils.isInViewport(item) && !item.classList.contains('animated')) {
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'translateX(0)';
+              item.classList.add('animated');
+            }, index * 200);
+          }
+        });
+      }
+    };
+
+    // Animation Management
+    const animationManager = {
+      init: () => {
+        // Check for reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          state.animationSpeed = 0.1;
+          document.body.classList.add('reduce-motion');
+        }
+
+        // Animate elements on scroll
+        window.addEventListener('scroll', utils.throttle(animationManager.handleScrollAnimations, 100));
+
+        // Initial animations
+        setTimeout(() => {
+          animationManager.animateOnLoad();
+        }, 100);
+      },
+
+      animateOnLoad: () => {
+        // Animate stats counters when they come into view
+        const statsSection = document.querySelector('.welcome-stats');
+        if (statsSection && utils.isInViewport(statsSection)) {
+          utils.animateCounters();
+        }
+
+        // Animate progress bar
+        setTimeout(() => {
+          if (courseProgressBar) {
+            // Initialize progress tracking instead of static animation
+            // progressManager.init() will handle this
+          }
+        }, 1000);
+      },
+
+      handleScrollAnimations: () => {
+        // Animate resources cards
+        const resourceCards = document.querySelectorAll('.resource-card');
+        resourceCards.forEach((card, index) => {
+          if (utils.isInViewport(card) && !card.classList.contains('animated')) {
+            setTimeout(() => {
+              card.style.animationDelay = `${index * 0.1}s`;
+              card.classList.add('animate-in');
+              card.classList.add('animated');
+            }, index * 100);
+          }
+        });
+
+        // Animate AOL cards on scroll
+        const aolCards = document.querySelectorAll('.aol-card');
+        aolCards.forEach((card, index) => {
+          if (utils.isInViewport(card) && !card.classList.contains('scrolled-in')) {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('scrolled-in');
+          }
+        });
+      }
+    };
+
+    // Loading Manager
+    const loadingManager = {
+      init: () => {
+        // Show content after DOM is fully loaded
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            loadingSpinner.classList.add('hidden');
+            document.body.style.overflow = 'visible';
+          }, 500);
+        });
+      }
+    };
+
+    // Intersection Observer for better performance
+    const observerManager = {
+      init: () => {
+        // Create intersection observer for animations
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+
+              // Trigger specific animations based on element type
+              if (entry.target.classList.contains('resource-card')) {
+                const index = Array.from(entry.target.parentNode.children).indexOf(entry.target);
+                entry.target.style.animationDelay = `${index * 0.1}s`;
+              }
+
+              if (entry.target.classList.contains('welcome-stats')) {
+                utils.animateCounters();
+              }
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '50px'
+        });
+
+        // Observe elements
+        document.querySelectorAll('.resource-card, .timeline-item, .welcome-stats, .aol-card').forEach(el => {
+          observer.observe(el);
+        });
+      }
+    };
+
+    // Keyboard Navigation
+    const keyboardManager = {
+      init: () => {
+        document.addEventListener('keydown', (e) => {
+          // Press 'D' to toggle dark mode
+          if (e.key === 'd' || e.key === 'D') {
+            if (!e.target.matches('input, textarea')) {
+              darkModeManager.toggle();
+            }
+          }
+
+          // Press 'T' to scroll to top
+          if (e.key === 't' || e.key === 'T') {
+            if (!e.target.matches('input, textarea')) {
+              scrollManager.scrollToTop();
+            }
+          }
+
+          // Escape key to close any open modals
+          if (e.key === 'Escape') {
+            // Close modals if any exist
+            const openModals = document.querySelectorAll('.modal.open');
+            openModals.forEach(modal => modal.classList.remove('open'));
+          }
+        });
+      }
+    };
+
+    // Modal Management
+    const modalManager = {
+    init: () => {
+        // Modal elements
+        const modals = {
+            courseOutline: document.getElementById('courseOutlineModal'),
+            contact: document.getElementById('contactModal'),
+            studyTips: document.getElementById('studyTipsModal')
+        };
+
+        // Trigger elements
+        const triggers = {
+            courseOutline: document.getElementById('courseOutlineLink'),
+            contact: document.getElementById('contactInstructorLink'),
+            studyTips: document.getElementById('studyTipsLink'),
+            officeHours: document.getElementById('officeHoursLink'),
+            faq: document.getElementById('faqLink')
+        };
+
+        // Close buttons
+        const closeButtons = {
+            courseOutline: document.getElementById('closeCourseOutline'),
+            contact: document.getElementById('closeContact'),
+            studyTips: document.getElementById('closeStudyTips')
+        };
+
+        // Set up modal triggers
+        Object.entries(triggers).forEach(([key, trigger]) => {
+            if (trigger) {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (key === 'officeHours') {
+                        modalManager.showOfficeHoursMessage();
+                    } else if (key === 'faq') {
+                        modalManager.showFAQMessage();
+                    } else if (modals[key]) {
+                        modalManager.openModal(modals[key]);
+                    }
+                });
+            }
+        });
+
+        // Set up close buttons
+        Object.values(closeButtons).forEach(button => {
+            if (button) {
+                button.addEventListener('click', modalManager.closeAllModals);
+            }
+        });
+
+        // Close on outside click
+        Object.values(modals).forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modalManager.closeAllModals();
+                });
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') modalManager.closeAllModals();
+        });
+    },
+
+    openModal: (modal) => {
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (firstFocusable) firstFocusable.focus();
+        }
+    },
+
+    closeAllModals: () => {
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.style.display = 'none';
+        });
+        document.body.style.overflow = 'auto';
+    },
+
+    showOfficeHoursMessage: () => {
+        const message = `
+📅 Office Hours Available by Appointment Only
+
+I am available to meet with students during scheduled office hours. To ensure I can give you my full attention and proper time for your questions, please make an appointment with me in advance.
+
+How to schedule:
+• Contact me via WeChat (MariusCoroiu)
+• Include your preferred meeting times
+• Specify the topics you'd like to discuss
+• I'll confirm the appointment and meeting details
+
+I look forward to helping you succeed in CIA4U Economics!
+
+我可以在预约的办公时间与学生会面。为了确保我能给您全部的关注，请提前与我预约。`;
+        
+        modalManager.createCustomModal('Office Hours | 办公时间', message);
+    },
+
+    showFAQMessage: () => {
+        const message = `
+📋 Frequently Asked Questions
+
+Common questions will be addressed here. For now, please contact me directly via WeChat for any questions about:
+
+• Assignment requirements and deadlines
+• Course content clarification  
+• Technical issues with AOL planners
+• Grading and feedback
+• Course policies and procedures
+
+Your questions help improve this course for everyone!
+
+常见问题将在此解答。现在，请通过微信直接联系我询问任何问题。`;
+        
+        modalManager.createCustomModal('FAQ | 常见问题', message);
+    },
+
+    createCustomModal: (title, content) => {
+        let customModal = document.getElementById('customModal');
+        if (!customModal) {
+            customModal = document.createElement('div');
+            customModal.id = 'customModal';
+            customModal.className = 'modal';
+            document.body.appendChild(customModal);
+        }
+
+        customModal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-modal" id="closeCustomModal">&times;</span>
+                <h2>${title}</h2>
+                <div class="custom-modal-content">
+                    <pre style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;">${content}</pre>
+                </div>
+            </div>
+        `;
+
+        const closeButton = customModal.querySelector('#closeCustomModal');
+        closeButton.addEventListener('click', modalManager.closeAllModals);
+        modalManager.openModal(customModal);
+    }
+};
+    // Enhanced card interactions
+    const cardManager = {
+      init: () => {
+        const aolCards = document.querySelectorAll('.aol-card');
+
+        aolCards.forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-8px) scale(1.02)';
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+          });
+
+          // Add ripple effect on click
+          card.addEventListener('click', (e) => {
+            if (!e.target.closest('.cta-button')) {
+              const ripple = document.createElement('div');
+              ripple.classList.add('ripple');
+              const rect = card.getBoundingClientRect();
+              const size = Math.max(rect.width, rect.height);
+              ripple.style.width = ripple.style.height = size + 'px';
+              ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+              ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+              card.appendChild(ripple);
+
+              setTimeout(() => {
+                ripple.remove();
+              }, 600);
+            }
+          });
+        });
+      }
+    };
+
+    // Error Handling
+    const errorHandler = {
+      init: () => {
+        window.addEventListener('error', (e) => {
+          console.error('An error occurred:', e.error);
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+          console.error('Unhandled promise rejection:', e.reason);
+        });
+      }
+    };
+
+    // Performance Monitoring
+    const performanceMonitor = {
+      init: () => {
+        // Monitor page load time
+        window.addEventListener('load', () => {
+          const loadTime = performance.now();
+          console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
+
+          // Monitor resource load times
+          const resources = performance.getEntriesByType('navigation')[0];
+          console.log('Navigation timing:', {
+            domContentLoaded: resources.domContentLoadedEventEnd - resources.domContentLoadedEventStart,
+            loadComplete: resources.loadEventEnd - resources.loadEventStart
+          });
+        });
+      }
+    };
+
+    // Analytics (placeholder for future implementation)
+    const analytics = {
+      init: () => {
+        // Track page views
+        this.trackPageView();
+
+        // Track button clicks
+        document.querySelectorAll('.cta-button').forEach(button => {
+          button.addEventListener('click', (e) => {
+            const aolNumber = e.target.closest('.aol-card')?.querySelector('.aol-title')?.textContent;
+            this.trackEvent('aol_access', { aol: aolNumber });
+          });
+        });
+      },
+
+      trackPageView: () => {
+        // Placeholder for analytics tracking
+        console.log('Page view tracked:', window.location.pathname);
+      },
+
+      trackEvent: (eventName, data = {}) => {
+        // Placeholder for event tracking
+        console.log('Event tracked:', eventName, data);
+      }
+    };
+
+    // Progress tracking system
+    const progressManager = {
+      // Get completion status from localStorage
+      getCompletionStatus: () => {
+        return {
+          aol1: localStorage.getItem('aol1_completed') === 'true',
+          aol2: localStorage.getItem('aol2_completed') === 'true',
+          aol3: localStorage.getItem('aol3_completed') === 'true',
+          aol4: localStorage.getItem('aol4_completed') === 'true',
+          aol5: localStorage.getItem('aol5_completed') === 'true'
+        };
+      },
+
+      // Update progress bar based on actual completion
+      updateProgressBar: () => {
+        const status = progressManager.getCompletionStatus();
+        const completed = Object.values(status).filter(Boolean).length;
+        const percentage = (completed / 5) * 100;
+
+        // Update visual elements
+        if (courseProgressBar) {
+          courseProgressBar.style.width = `${percentage}%`;
+        }
+        const progressText = document.querySelector('.progress-text');
+        if (progressText) {
+          progressText.innerHTML = `${completed} of 5 AOLs Completed | <span class="chinese">${completed}个AOL中的5个已完成</span>`;
+        }
+      },
+
+      // Mark AOL as completed (call this when user exports)
+      markCompleted: (aolNumber) => {
+        localStorage.setItem(`aol${aolNumber}_completed`, 'true');
+        progressManager.updateProgressBar();
+      },
+
+      // Initialize progress tracking
+      init: () => {
+        progressManager.updateProgressBar();
+      }
+    };
+
+    // Dual Language Support
+    const languageManager = {
+      currentLanguage: 'en',
+
+      init: () => {
+        // Add language toggle if needed in the future
+        // For now, both languages are displayed simultaneously
+        this.ensureChineseTranslations();
+      },
+
+      ensureChineseTranslations: () => {
+        // Ensure all major headings have Chinese translations
+        const elementsToCheck = [
+          { selector: '.header-title', chinese: 'MLS经济学CIA4U' },
+          { selector: '.welcome-title', chinese: '欢迎来到经济学评估中心' },
+          { selector: '.timeline-title', chinese: '课程时间线和重要日期' },
+          { selector: '.resources-title', chinese: '有用资源' }
+        ];
+
+        elementsToCheck.forEach(({ selector, chinese }) => {
+          const element = document.querySelector(selector);
+          if (element && !element.nextElementSibling?.classList.contains('chinese')) {
+            const chineseElement = document.createElement('span');
+            chineseElement.className = 'chinese';
+            chineseElement.textContent = chinese;
+            element.parentNode.insertBefore(chineseElement, element.nextSibling);
+          }
+        });
+      }
+    };
+
+    // Accessibility Enhancements
+    const accessibilityManager = {
+      init: () => {
+        // Add skip link for keyboard navigation
+        this.addSkipLink();
+
+        // Enhance focus management
+        this.enhanceFocusManagement();
+
+        // Add aria labels where needed
+        this.addAriaLabels();
+      },
+
+      addSkipLink: () => {
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main-content';
+        skipLink.className = 'skip-link';
+        skipLink.textContent = 'Skip to main content';
+        skipLink.style.cssText = `
+          position: absolute;
+          top: -40px;
+          left: 6px;
+          background: var(--primary-color);
+          color: white;
+          padding: 8px;
+          text-decoration: none;
+          z-index: 100;
+          border-radius: 4px;
+        `;
+
+        skipLink.addEventListener('focus', () => {
+          skipLink.style.top = '6px';
+        });
+
+        skipLink.addEventListener('blur', () => {
+          skipLink.style.top = '-40px';
+        });
+
+        document.body.insertBefore(skipLink, document.body.firstChild);
+      },
+
+      enhanceFocusManagement: () => {
+        // Add visible focus indicators
+        const style = document.createElement('style');
+        style.textContent = `
+          .focus-visible {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 2px;
+          }
+        `;
+        document.head.appendChild(style);
+      },
+
+      addAriaLabels: () => {
+        // Add aria-labels to cards
+        document.querySelectorAll('.aol-card').forEach((card, index) => {
+          const title = card.querySelector('.aol-title').textContent;
+          card.setAttribute('aria-label', `${title} Assessment`);
+        });
+
+        // Add aria-labels to resource cards
+        document.querySelectorAll('.resource-card').forEach(card => {
+          const title = card.querySelector('.resource-title').textContent;
+          card.setAttribute('aria-label', `Resource: ${title}`);
+        });
+      }
+    };
+
+    // Main Initialization
+    const app = {
+      init: () => {
+        // Initialize dark mode first
+        darkModeManager.init();
+        
+        // Initialize all managers
+        loadingManager.init();
+        scrollManager.init();
+        animationManager.init();
+        observerManager.init();
+        keyboardManager.init();
+        cardManager.init();
+        errorHandler.init();
+        performanceMonitor.init();
+        analytics.init();
+        languageManager.init();
+        accessibilityManager.init();
+        progressManager.init();
+        modalManager.init();
+
+
+        // Add smooth scrolling to all internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          });
+        });
+
+        // Initialize page
+        this.setupInitialState();
+      },
+
+      setupInitialState: () => {
+        // Add main content id for skip link
+        const container = document.querySelector('.container');
+        if (container) {
+          container.id = 'main-content';
+        }
+
+        // Set initial focus for accessibility
+        document.body.setAttribute('tabindex', '-1');
+        document.body.focus();
+
+        // Add loading animation for late-loading content
+        setTimeout(() => {
+          document.body.classList.add('loaded');
+        }, 100);
+      }
+    };
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', app.init);
+    } else {
+      app.init();
+    }
+
+    // Add CSS for ripple effect and other dynamic styles
+    const dynamicStyles = document.createElement('style');
+    dynamicStyles.textContent = `
+      .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0);
+        animation: ripple-animation 0.6s linear;
+        pointer-events: none;
+      }
+      
+      @keyframes ripple-animation {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+      
+      .reduce-motion * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .animate-in {
+        animation: slideInUp 0.6s ease forwards;
+      }
+      
+      .scrolled-in {
+        animation: slideInUp 0.6s ease forwards;
+      }
+      
+      .in-view {
+        animation-play-state: running;
+      }
+    `;
+    document.head.appendChild(dynamicStyles);
+  </script>
+</body>
+
+</html>

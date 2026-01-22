@@ -1,0 +1,3397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIA4U AOL #2 Planner</title>
+  <!-- External Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Global & Animated Background */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --background-light: #f0f9ff;
+      --text-dark: #333;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(-45deg, #f0f9ff, #e3f2fd, #f4f4f9);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Header & Dark Mode Toggle */
+    header {
+      background-color: var(--primary-color);
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 1.2em;
+      position: relative;
+    }
+
+    #darkModeToggle {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: transparent;
+      border: none;
+      font-size: 1.2em;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #eee;
+      margin-bottom: 20px;
+    }
+
+    .progress {
+      height: 100%;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    /* Main Container */
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Section styles */
+    h2 {
+      color: #2e7d32;
+      margin-top: 0;
+    }
+
+    .section {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+      color: #555;
+      font-size: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      background-color: #333;
+      color: #fff;
+    }
+
+    .motivation {
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #ffd700;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button.secondary {
+      background-color: var(--secondary-color);
+    }
+
+    button.secondary:hover {
+      background-color: #1976D2;
+    }
+
+    /* Floating Input Groups */
+    .input-group {
+      position: relative;
+      margin: 15px 0;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      padding: 12px;
+      border: 2px solid var(--primary-color);
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);
+    }
+
+    .input-group label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: white;
+      padding: 0 5px;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .input-group input:focus+label,
+    .input-group input:not(:placeholder-shown)+label,
+    .input-group textarea:focus+label,
+    .input-group textarea:not(:placeholder-shown)+label {
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      color: #2e7d32;
+    }
+
+    /* Page Display */
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    /* Essay Plan Containers */
+    .essay-section-container {
+      margin-bottom: 25px;
+    }
+
+    .section-tip {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .essay-box {
+      border: 2px dashed var(--primary-color);
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #e8f5e9;
+      margin-top: 5px;
+    }
+
+    .essay-input-group {
+      margin-bottom: 15px;
+    }
+
+    .essay-input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .essay-input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+    }
+
+    /* Live Preview Pane */
+    .preview-pane {
+      position: fixed;
+      right: 20px;
+      top: 100px;
+      width: 300px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-height: 80vh;
+      overflow-y: auto;
+      resize: both;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .preview-header h3 {
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    /* Enhanced Table Editor */
+    .table-editor {
+      margin-top: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #fafafa;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    .add-row-btn {
+      margin-top: 10px;
+      background-color: var(--secondary-color);
+    }
+
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: help;
+    }
+
+    .tooltip i {
+      color: var(--primary-color);
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 14px;
+      line-height: 1.4;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+
+    /* Collapsible sections */
+    .collapsible {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      margin-top: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collapsible:hover {
+      background-color: #ddd;
+    }
+
+    .collapsible:after {
+      content: '\002B';
+      /* Plus sign */
+      font-weight: bold;
+      float: right;
+      margin-left: 5px;
+    }
+
+    .active-collapsible:after {
+      content: "\2212";
+      /* Minus sign */
+    }
+
+    .collapsible-content {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+      background-color: #f9f9f9;
+      border-radius: 0 0 5px 5px;
+    }
+
+    /* Enhanced Spectrum Slider */
+    .spectrum-container {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .spectrum-title {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .spectrum-wrapper {
+      position: relative;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+
+    .spectrum {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      height: 60px;
+      margin: 30px 0;
+    }
+
+    .spectrum-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(to right, #d32f2f, #E6B333, var(--primary-color));
+      transform: translateY(-50%);
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .spectrum-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .spectrum-label {
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .spectrum-label i {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .spectrum-marker {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: #3f51b5;
+      border-radius: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      border: 3px solid white;
+      transition: background-color 0.3s;
+    }
+
+    .spectrum-marker:hover {
+      background-color: #303f9f;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .spectrum-tick {
+      position: absolute;
+      top: 50%;
+      width: 2px;
+      height: 12px;
+      background-color: #888;
+      transform: translateY(-50%);
+    }
+
+    .spectrum-tick-label {
+      position: absolute;
+      top: -20px;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: #666;
+    }
+
+    .spectrum-sections {
+      display: flex;
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      height: 20px;
+    }
+
+    .spectrum-section {
+      flex: 1;
+      border-right: 1px dashed #ddd;
+      position: relative;
+    }
+
+    .spectrum-section:last-child {
+      border-right: none;
+    }
+
+    .spectrum-section-text {
+      position: absolute;
+      top: -5px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      display: none;
+    }
+
+    .spectrum-section:hover .spectrum-section-text {
+      display: block;
+    }
+
+    /* Enhanced Radio Button Style */
+    .radio-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      padding-left: 25px;
+      margin-right: 15px;
+      font-size: 14px;
+    }
+
+    .radio-label input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      background-color: #eee;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+    }
+
+    .radio-label:hover input~.checkmark {
+      background-color: #ccc;
+    }
+
+    .radio-label input:checked~.checkmark {
+      background-color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    .radio-label input:checked~.checkmark:after {
+      display: block;
+    }
+
+    .radio-label .checkmark:after {
+      top: 5px;
+      left: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    /* Cost-Benefit Impact Levels */
+    .impact-high {
+      background-color: #ffe0e0;
+      font-weight: bold;
+    }
+
+    .impact-medium {
+      background-color: #fff0e0;
+    }
+
+    .impact-low {
+      background-color: #f0f0f0;
+    }
+
+    /* Temporal Indicators */
+    .time-short {
+      color: #1976D2;
+    }
+
+    .time-medium {
+      color: #7B1FA2;
+    }
+
+    .time-long {
+      color: #C2185B;
+    }
+
+    /* Modal for Net Assessment */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-modal:hover {
+      color: black;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background: #2d2d2d;
+      color: #fff;
+    }
+
+    .dark-mode .section {
+      background: #424242;
+      color: #fff;
+    }
+
+    .dark-mode input,
+    .dark-mode textarea {
+      border-color: #888;
+      background: #333;
+      color: #fff;
+    }
+
+    .dark-mode .input-group label {
+      background: #424242;
+      color: #aaa;
+    }
+
+    .dark-mode .preview-pane {
+      background: #424242;
+      color: #fff;
+    }
+
+    .dark-mode .essay-box {
+      background-color: #424242;
+      border-color: var(--primary-color);
+    }
+
+    .dark-mode th {
+      background-color: #388e3c;
+    }
+
+    .dark-mode td {
+      border-color: #555;
+      background-color: #333;
+    }
+
+    .dark-mode tr:nth-child(even) td {
+      background-color: #3a3a3a;
+    }
+
+    .dark-mode .table-editor {
+      background-color: #333;
+      border-color: #555;
+    }
+
+    .dark-mode .collapsible {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .dark-mode .collapsible:hover {
+      background-color: #444;
+    }
+
+    .dark-mode .collapsible-content {
+      background-color: #424242;
+    }
+
+    .dark-mode .checkmark {
+      background-color: #555;
+      border-color: #777;
+    }
+
+    .dark-mode .modal-content {
+      background-color: #333;
+      color: #fff;
+      border-color: #555;
+    }
+
+    .dark-mode .close-modal {
+      color: #ddd;
+    }
+
+    .dark-mode .close-modal:hover {
+      color: #fff;
+    }
+
+    .dark-mode .spectrum-label {
+      color: #ddd;
+    }
+
+    .dark-mode .impact-high {
+      background-color: #5a3030;
+    }
+
+    .dark-mode .impact-medium {
+      background-color: #5a4530;
+    }
+
+    .dark-mode .impact-low {
+      background-color: #3a3a3a;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      main {
+        padding: 10px;
+      }
+
+      .preview-pane {
+        width: 90%;
+        right: 5%;
+      }
+
+      .spectrum-labels {
+        flex-direction: column;
+      }
+    }
+
+    .translation-text {
+      display: block;
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <header ondblclick="triggerRainbow()">
+    <h1>🎓 AOL #2 Planner - CIA4U</h1>
+    <button id="darkModeToggle">🌓 Toggle Dark Mode</button>
+    <p>Follow these steps to complete your 3-part assignment. Let's make it structured and insightful! 😄</p>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress"></div>
+  </div>
+
+  <!-- Modals for Net Assessment -->
+  <div id="taxModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('taxModal')">&times;</span>
+      <h3>Net Assessment: Changing the Tax System</h3>
+      <p>A comprehensive analysis of the costs and benefits suggests that changes to the tax system can have significant
+        economic and social impacts. The benefits of reducing inequality and funding public services must be balanced
+        against potential decreases in investment incentives and implementation challenges.</p>
+      <p>When evaluating tax system changes, consider:</p>
+      <ul>
+        <li>The overall economic impact across different time horizons</li>
+        <li>Distributional effects across different income groups</li>
+        <li>Administrative and compliance costs</li>
+        <li>Behavioral responses of taxpayers</li>
+      </ul>
+      <p>A successful tax system reform usually requires careful planning, stakeholder engagement, and implementation
+        that minimizes disruption while maximizing intended benefits.</p>
+      <textarea id="taxAssessment" rows="5" style="width: 100%; margin-top: 10px;"
+        placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <div id="incomeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('incomeModal')">&times;</span>
+      <h3>Net Assessment: Guaranteed Annual Income</h3>
+      <p>Guaranteed annual income programs present a complex balance of social benefits against economic costs. The
+        poverty reduction and economic security benefits are substantial, particularly for vulnerable populations.
+        However, the significant public expense and potential work disincentives present challenges.</p>
+      <p>When evaluating guaranteed income proposals, consider:</p>
+      <ul>
+        <li>Program design (universal vs. targeted, amount, phase-out rates)</li>
+        <li>Funding mechanisms and fiscal sustainability</li>
+        <li>Integration with existing social programs</li>
+        <li>Potential labor market impacts</li>
+      </ul>
+      <p>Pilot programs suggest that guaranteed income can provide significant social benefits with modest impacts on
+        labor participation, but implementation at scale presents both fiscal and political challenges.</p>
+      <textarea id="incomeAssessment" rows="5" style="width: 100%; margin-top: 10px;"
+        placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+  <div id="microcreditModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('microcreditModal')">&times;</span>
+      <h3>Net Assessment: Microcredit</h3>
+      <p>Microcredit provides important financial access for underserved communities, but its overall impact depends
+        heavily on implementation. The primary benefits include entrepreneurship support and increased financial
+        inclusion, while costs include higher interest rates and potential over-indebtedness.</p>
+      <p>When evaluating microcredit programs, consider:</p>
+      <ul>
+        <li>Interest rate structures and repayment terms</li>
+        <li>Complementary services (financial education, business training)</li>
+        <li>Target population needs and capabilities</li>
+        <li>Regulatory frameworks to prevent predatory practices</li>
+      </ul>
+      <p>Research suggests that microcredit works best when combined with other interventions and when designed with
+        borrower protection mechanisms. The net impact is typically positive but more modest than initially claimed by
+        early advocates.</p>
+      <textarea id="microcreditAssessment" rows="5" style="width: 100%; margin-top: 10px;"
+        placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <div id="unionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('unionModal')">&times;</span>
+      <h3>Net Assessment: Labour Unions</h3>
+      <p>Labour unions play a complex role in modern economies, providing worker protections and collective bargaining
+        power while potentially creating market rigidities. The benefits primarily accrue to workers through improved
+        wages and conditions, while costs may affect businesses and potentially consumers.</p>
+      <p>When evaluating union impacts, consider:</p>
+      <ul>
+        <li>Industry context and competitive conditions</li>
+        <li>Union density and bargaining structure</li>
+        <li>Regulatory framework for labor relations</li>
+        <li>Union governance and objectives</li>
+      </ul>
+      <p>Research suggests that unions can reduce wage inequality and improve working conditions with modest effects on
+        overall employment when operating in competitive markets with appropriate regulations. The net impact varies
+        significantly by context and union practices.</p>
+      <textarea id="unionAssessment" rows="5" style="width: 100%; margin-top: 10px;"
+        placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <main>
+    <!-- Live Preview Pane -->
+    <div class="preview-pane" id="previewPane">
+      <div class="preview-header">
+        <h3>Live Preview ✨</h3>
+        <button id="previewToggle" onclick="togglePreview()">Collapse</button>
+      </div>
+      <div class="preview-content">Your content will appear here as you type...</div>
+    </div>
+
+    <!-- Page 1: Assignment Overview -->
+    <div id="page1" class="section page active">
+      <h2>Assignment Overview</h2>
+      <p class="info">Due at the end of Unit 2, worth 15% of your final grade.</p>
+      <ul>
+        <li><strong>Title:</strong> Choose an insightful, telling title which demonstrates something unique about your
+          analysis in both Parts I and II.</li>
+        <li><strong>Format:</strong> Double spaced, revised, edited, proofread with your name, teacher's name, date, and
+          exact word count.</li>
+        <li><strong>Plagiarism Warning:</strong> Will trigger the MLS' ZERO TOLERANCE academic dishonesty policy!</li>
+      </ul>
+      <div class="section-tip">Your assignment has three main components:</div>
+      <ol>
+        <li><strong>Opinion Column (600 words)</strong> - Revisit your Anticipation Guide and compare your initial and
+          final opinions.</li>
+        <li><strong>Academic Essay (600 words)</strong> - Reflect on your position between Malthus and Picketty.</li>
+        <li><strong>Econochart</strong> - Create a comprehensive cost-benefit analysis for tax system changes,
+          guaranteed annual income, microcredit, and labor unions.</li>
+      </ol>
+      <div class="nav-buttons">
+        <button onclick="nextPage(2)">Next: Anticipation Guide</button>
+      </div>
+    </div>
+
+    <!-- Page 2: Anticipation Guide -->
+    <div id="page2" class="section page">
+      <h2>Anticipation Guide</h2>
+      <p class="info">Complete this anticipation guide by indicating whether you agree or disagree with each statement.
+        You will revisit these opinions in Part I of your assignment.</p>
+
+      <div class="table-container">
+        <table id="anticipationTable">
+          <tr>
+            <th width="5%">#</th>
+            <th width="50%">Statement</th>
+            <th width="22.5%">Initial Opinion</th>
+            <th width="22.5%">Final Opinion</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Homelessness is a problem because people do not want to work and the causes are too complicated to fix.
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial1" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial1" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final1" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final1" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Over 30,000 Canadians are homeless every day.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial2" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial2" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final2" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final2" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>The cost of homelessness for Canada is minor.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial3" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial3" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final3" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final3" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Welfare is an effective way of helping the poor.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial4" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial4" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final4" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final4" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Economists do not agree on how to help the poor.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial5" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial5" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final5" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final5" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>If the rich pay higher taxes, then there will be fewer jobs.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial6" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial6" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final6" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final6" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>It is better for the economy if society does nothing for the poor.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial7" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial7" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final7" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final7" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>The poor will always be poor and there is nothing that governments can do about it.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial8" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial8" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final8" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final8" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Labour unions no longer help improve the lives of working Canadians.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial9" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial9" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final9" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final9" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>The rich are getting richer and the poor are getting poorer.</td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="initial10" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="initial10" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label">
+                  <input type="radio" name="final10" value="agree">
+                  <span class="checkmark"></span>
+                  Agree
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="final10" value="disagree">
+                  <span class="checkmark"></span>
+                  Disagree
+                </label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="section-tip">
+        <p><strong>Instructions:</strong></p>
+        <ul>
+          <li>Fill out the "Initial Opinion" column now, before completing the unit activities.</li>
+          <li>After completing your unit activities, fill out the "Final Opinion" column.</li>
+          <li>In Part I of your assignment, you will analyze how and why your opinions changed (or didn't change).</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage(1)">Go Back</button>
+        <button onclick="nextPage(3)">Next: Cover Page Details</button>
+      </div>
+    </div>
+
+    <!-- Page 3: Cover Page Details -->
+    <div id="page3" class="section page">
+      <h2>Cover Page Details</h2>
+      <p class="info">Enter your cover page information. These details will appear on your downloaded document.</p>
+      <div class="input-group">
+        <input type="text" id="coverStudent" placeholder=" " />
+        <label for="coverStudent">Student's Name:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverTeacher" value="Dr. Dan Zebeljan" readonly placeholder=" " />
+        <label for="coverTeacher">Teacher's Name:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverCourse" value="CIA4U-AOL2" readonly placeholder=" " />
+        <label for="coverCourse">Course Code:</label>
+      </div>
+      <div class="input-group">
+        <input type="date" id="coverDate" placeholder=" " />
+        <label for="coverDate">Date:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverTitle" placeholder=" " />
+        <label for="coverTitle">Assignment Title:</label>
+      </div>
+      <div class="nav-buttons">
+        <button onclick="prevPage(2)">Go Back</button>
+        <button onclick="nextPage(4)">Next: Part I - Opinion Column</button>
+      </div>
+    </div>
+    <!-- Page 4: Part I - Opinion Column -->
+    <div id="page4" class="section page">
+      <h2>Part I: Opinion Column (600 words)</h2>
+      <p class="info">Revisit the Anticipation Guide you completed earlier, and analyze how your opinions have changed
+        after completing the unit activities.</p>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Introduction (Suggested: 100-150 words):</strong> Engage your readers with a
+          strong opening and establish your purpose.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionIntro">Introduction:</label>
+            <textarea id="opinionIntro" rows="5"
+              placeholder="Start with an engaging hook (surprising statistic, provocative question, or relevant quote about economics). Provide context about your initial economic perspective. Clearly state your thesis (how your economic thinking has evolved during this unit)."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>Components of a strong introduction:</strong>
+            <ul>
+              <li><strong>Hook:</strong> Capture reader's attention with a provocative question, surprising statistic,
+                or compelling quote</li>
+              <li><strong>Context:</strong> Briefly explain your initial economic perspective</li>
+              <li><strong>Thesis:</strong> Clearly state how your economic thinking has evolved (or stayed consistent)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Statement Analysis (Suggested: 300-350 words):</strong> Select 3-4 key statements
+          from your Anticipation Guide and analyze how and why your opinions changed or remained the same.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionStatement1">Statement 1 Analysis:</label>
+            <textarea id="opinionStatement1" rows="5"
+              placeholder="Begin with a clear topic sentence identifying the statement and your opinion change. Explain your initial perspective with supporting reasoning. Describe your current perspective with evidence from course materials. Analyze what caused your opinion to change or remain consistent. End with a clincher that connects to your overall thesis."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="opinionStatement2">Statement 2 Analysis:</label>
+            <textarea id="opinionStatement2" rows="5"
+              placeholder="Begin with a clear topic sentence identifying the statement and your opinion change. Explain your initial perspective with supporting reasoning. Describe your current perspective with evidence from course materials. Analyze what caused your opinion to change or remain consistent. End with a clincher that connects to your overall thesis."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="opinionStatement3">Statement 3 Analysis:</label>
+            <textarea id="opinionStatement3" rows="5"
+              placeholder="Begin with a clear topic sentence identifying the statement and your opinion change. Explain your initial perspective with supporting reasoning. Describe your current perspective with evidence from course materials. Analyze what caused your opinion to change or remain consistent. End with a clincher that connects to your overall thesis."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="opinionStatement4">Statement 4 Analysis (Optional):</label>
+            <textarea id="opinionStatement4" rows="5"
+              placeholder="Begin with a clear topic sentence identifying the statement and your opinion change. Explain your initial perspective with supporting reasoning. Describe your current perspective with evidence from course materials. Analyze what caused your opinion to change or remain consistent. End with a clincher that connects to your overall thesis."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>For each statement analysis, include:</strong>
+            <ul>
+              <li><strong>Topic sentence:</strong> Clearly identify the statement and whether your opinion changed</li>
+              <li><strong>Initial perspective:</strong> Explain your initial reasoning</li>
+              <li><strong>Current perspective:</strong> Describe your current view with evidence</li>
+              <li><strong>Analysis:</strong> Examine what learning or evidence caused your opinion to change</li>
+              <li><strong>Clincher:</strong> Connect back to your overall thesis/theme</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Conclusion (Suggested: 100-150 words):</strong> Summarize the evolution of your
+          economic thinking and what influenced these changes.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionConclusion">Conclusion:</label>
+            <textarea id="opinionConclusion" rows="5"
+              placeholder="Restate your thesis about how your economic understanding has evolved. Summarize the key changes in your thinking about poverty, wealth distribution, and economic policies. Explain the broader implications of your evolved perspective. End with a thought-provoking final statement about economics or your future approach to economic issues."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>Components of an effective conclusion:</strong>
+            <ul>
+              <li><strong>Restate thesis:</strong> Rephrase, don't repeat, your main idea about your evolution of
+                thought</li>
+              <li><strong>Summarize key points:</strong> Briefly highlight the most significant changes in your thinking
+              </li>
+              <li><strong>Implications:</strong> What does this evolution in thinking mean for your understanding of
+                economics?</li>
+              <li><strong>Final thought:</strong> End with something memorable that gives your reader something to
+                consider</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage(3)">Go Back</button>
+        <button onclick="nextPage(5)">Next: Part II - Academic Essay</button>
+      </div>
+    </div>
+
+    <!-- Page 5: Part II - Academic Essay -->
+    <div id="page5" class="section page">
+      <h2>Part II: Academic Essay (600 words)</h2>
+      <p class="info">Reflect back on where you stood on the spectrum between Malthus and Picketty. Place an "X" on the
+        spectrum to represent your viewpoint now. Has it changed? Why?</p>
+
+      <div class="section-tip" style="margin-bottom: 15px;">
+        <strong>Understanding the spectrum:</strong>
+        <div class="tooltip">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip-text">Thomas Malthus (1766-1834) argued that population growth would outpace food
+            production, leading to inevitable poverty. Thomas Piketty (b. 1971) focuses on wealth inequality and how
+            capital concentration leads to economic disparities.</span>
+        </div>
+      </div>
+
+      <div class="spectrum-container">
+        <h3 class="spectrum-title">Your Position on the Economic Spectrum</h3>
+        <div class="spectrum-wrapper">
+          <div class="spectrum">
+            <div class="spectrum-line"></div>
+            <div class="spectrum-marker" id="positionMarker" style="left: 50%;"></div>
+
+            <!-- Add tick marks -->
+            <div class="spectrum-tick" style="left: 10%;">
+              <div class="spectrum-tick-label">10%</div>
+            </div>
+            <div class="spectrum-tick" style="left: 30%;">
+              <div class="spectrum-tick-label">30%</div>
+            </div>
+            <div class="spectrum-tick" style="left: 50%;">
+              <div class="spectrum-tick-label">50%</div>
+            </div>
+            <div class="spectrum-tick" style="left: 70%;">
+              <div class="spectrum-tick-label">70%</div>
+            </div>
+            <div class="spectrum-tick" style="left: 90%;">
+              <div class="spectrum-tick-label">90%</div>
+            </div>
+
+            <!-- Add hover sections -->
+            <div class="spectrum-sections">
+              <div class="spectrum-section">
+                <div class="spectrum-section-text">Strong Malthusian view</div>
+              </div>
+              <div class="spectrum-section">
+                <div class="spectrum-section-text">Moderate Malthusian view</div>
+              </div>
+              <div class="spectrum-section">
+                <div class="spectrum-section-text">Balanced perspective</div>
+              </div>
+              <div class="spectrum-section">
+                <div class="spectrum-section-text">Moderate Picketty view</div>
+              </div>
+              <div class="spectrum-section">
+                <div class="spectrum-section-text">Strong Picketty view</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="spectrum-labels">
+            <div class="spectrum-label">
+              <i class="fas fa-seedling"></i>
+              <strong>Malthus</strong><br>Resource scarcity
+            </div>
+            <div class="spectrum-label">
+              <i class="fas fa-balance-scale"></i>
+              <strong>Middle Ground</strong>
+            </div>
+            <div class="spectrum-label">
+              <i class="fas fa-chart-line"></i>
+              <strong>Picketty</strong><br>Wealth inequality
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="hidden" id="spectrumPosition" value="50" />
+        <input type="text" id="positionDescription" placeholder=" " />
+        <label for="positionDescription">Brief description of your position:</label>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Introduction (Suggested: 100 words):</strong> Establish your position and provide
+          a clear thesis statement.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicIntro">Introduction:</label>
+            <textarea id="academicIntro" rows="5"
+              placeholder="Start with an engaging hook related to economic inequality or resource scarcity. Provide context about the Malthus-Picketty spectrum and its significance. Clearly state your position on this spectrum with a strong thesis statement that outlines your main arguments. Briefly mention whether your position has changed since beginning this unit."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>Academic introduction elements:</strong>
+            <ul>
+              <li><strong>Hook:</strong> Begin with a compelling fact, question or quote about economic theory</li>
+              <li><strong>Context:</strong> Briefly explain the Malthus-Picketty spectrum</li>
+              <li><strong>Thesis statement:</strong> Clearly state your position and preview your main arguments</li>
+              <li><strong>Scope:</strong> Indicate if your position has shifted during your studies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Body Paragraphs (Suggested: 400 words):</strong> Develop your arguments with
+          evidence, analysis and reasoning.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicBody1">Body Paragraph 1 - Key Argument:</label>
+            <textarea id="academicBody1" rows="5"
+              placeholder="Begin with a clear topic sentence stating your first main argument. Support your position with specific evidence from economic theory, course materials, or real-world examples. Provide analysis explaining how this evidence supports your position on the spectrum. Include a clincher sentence that connects back to your thesis."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="academicBody2">Body Paragraph 2 - Supporting Evidence:</label>
+            <textarea id="academicBody2" rows="5"
+              placeholder="Start with a topic sentence introducing your second main point. Include specific economic concepts, data, or examples that support your position. Analyze how these examples relate to either Malthus's or Picketty's theories (or a middle ground). Explain the significance of this evidence in forming your economic perspective. End with a clincher that transitions to your next point."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="academicBody3">Body Paragraph 3 - Evolution of Position:</label>
+            <textarea id="academicBody3" rows="5"
+              placeholder="Begin with a topic sentence about how your position has evolved (or remained consistent). Explain your original position and what factors influenced your initial thinking. Describe what specific learning, evidence, or insights caused any shift in your perspective. Analyze why this evolution matters in your understanding of economics. End with a clincher that leads toward your conclusion."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>Academic body paragraph structure:</strong>
+            <ul>
+              <li><strong>Topic sentence:</strong> Clearly state the main idea of the paragraph</li>
+              <li><strong>Evidence:</strong> Support your claim with specific examples, data, or theory</li>
+              <li><strong>Analysis:</strong> Explain how and why this evidence supports your position</li>
+              <li><strong>Relevance:</strong> Connect to Malthus, Picketty, or points along the spectrum</li>
+              <li><strong>Clincher:</strong> Conclude paragraph and transition to next point</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Conclusion (Suggested: 100 words):</strong> Synthesize your position and discuss
+          its broader implications.</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicConclusion">Conclusion:</label>
+            <textarea id="academicConclusion" rows="5"
+              placeholder="Restate your thesis about your position on the Malthus-Picketty spectrum. Summarize your key arguments and the evidence that supports your position. Discuss the broader implications of your position for understanding contemporary economic issues. End with a thought-provoking statement about economic theory or policy that extends from your position."></textarea>
+          </div>
+          <div class="section-tip" style="margin-top: 10px;">
+            <strong>Academic conclusion elements:</strong>
+            <ul>
+              <li><strong>Restate thesis:</strong> Rephrase your main argument about your position</li>
+              <li><strong>Summarize key points:</strong> Briefly recap your main arguments</li>
+              <li><strong>Implications:</strong> Explain why your position matters in a broader context</li>
+              <li><strong>Final thought:</strong> End with a compelling statement that leaves readers thinking</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage(4)">Go Back</button>
+        <button onclick="nextPage(6)">Next: Part III - Cost-Benefit Analysis</button>
+      </div>
+    </div>
+
+    <!-- Page 6: Part III - Econochart -->
+    <div id="page6" class="section page">
+      <h2>Part III: Comprehensive Cost-Benefit Analysis</h2>
+      <p class="info">For each of the following economic concepts, create a comprehensive cost-benefit analysis. Include
+        impact levels, timeframes, and stakeholder considerations.</p>
+
+      <div class="section-tip" style="margin-bottom: 15px;">
+        <strong>Components of Comprehensive Cost-Benefit Analysis:</strong>
+        <div class="tooltip">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip-text">A comprehensive cost-benefit analysis (CBA) goes beyond simply listing pros and
+            cons. It includes impact magnitude, timeframes, stakeholder effects, and an overall assessment of whether
+            benefits outweigh costs. CBAs help policymakers make evidence-based decisions by systematically evaluating
+            all relevant factors.</span>
+        </div>
+        <ul>
+          <li><strong>Impact Level:</strong> High, Medium, or Low significance
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">High impact: Significant economic, social, or political consequence<br>Medium
+                impact: Moderate influence on economic outcomes<br>Low impact: Minor effects that may not significantly
+                alter outcomes</span>
+            </div>
+          </li>
+          <li><strong>Timeframe:</strong> Short-term (ST), Medium-term (MT), or Long-term (LT)
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Short-term: Effects visible within 1-2 years<br>Medium-term: Effects emerging
+                within 2-5 years<br>Long-term: Effects manifesting over 5+ years</span>
+            </div>
+          </li>
+          <li><strong>Primary Stakeholders:</strong> Who is most affected
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">Consider various groups: workers, businesses, consumers, taxpayers, specific
+                demographic groups, government entities, etc.</span>
+            </div>
+          </li>
+          <li><strong>Net Assessment:</strong> Overall evaluation of whether benefits outweigh costs
+            <div class="tooltip">
+              <i class="fas fa-info-circle"></i>
+              <span class="tooltip-text">The ultimate analysis that weighs all factors to determine if the policy or
+                initiative creates a net positive outcome for society.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tax System Table -->
+      <div class="table-editor">
+        <h3>1. Changing the Tax System (5 points)</h3>
+        <div class="section-tip" style="margin-bottom: 10px;">
+          Consider changes like progressive taxation, wealth taxes, consumption taxes, or corporate tax reforms.
+        </div>
+        <div class="table-container">
+          <table id="taxTable">
+            <tr>
+              <th width="25%">Benefits</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+              <th width="25%">Costs</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Progressive taxation can reduce wealth inequality and income gaps</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Lower/middle income groups</td>
+              <td contenteditable="true">Higher administrative costs for complex tax systems</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Tax agencies, government</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Can generate revenue to fund public services and infrastructure</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">General public, government</td>
+              <td contenteditable="true">Potential negative impact on investment incentives</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Investors, businesses</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Wealth taxes can address intergenerational wealth concentration</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Younger generations, wealthy families</td>
+              <td contenteditable="true">Risk of capital flight to lower-tax jurisdictions</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">National economy, tax base</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Tax incentives can promote desired behaviors (e.g., green technology)</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Environment, targeted industries</td>
+              <td contenteditable="true">Political resistance from affected groups</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">High-income earners, policy makers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('taxTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('taxModal')" style="margin-left: 10px;">Write Net
+          Assessment</button>
+      </div>
+
+      <!-- Guaranteed Annual Income Table -->
+      <div class="table-editor">
+        <h3>2. Guaranteed Annual Income (5 points)</h3>
+        <div class="section-tip" style="margin-bottom: 10px;">
+          Also known as Universal Basic Income (UBI) or minimum income guarantee programs.
+        </div>
+        <div class="table-container">
+          <table id="incomeTable">
+            <tr>
+              <th width="25%">Benefits</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+              <th width="25%">Costs</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Reduces poverty and economic insecurity</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Low-income individuals, unemployed</td>
+              <td contenteditable="true">Significant public expense requiring tax increases</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Taxpayers, government budget</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Can stimulate consumer spending and economic activity</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Local businesses, retail sector</td>
+              <td contenteditable="true">Potential reduction in labor force participation</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Labor market, employers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Simplifies welfare systems by replacing multiple programs</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Government agencies, welfare recipients</td>
+              <td contenteditable="true">May cause inflation if not implemented with proper policies</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">General economy, consumers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Supports unpaid care work, education, and entrepreneurship</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Caregivers, students, entrepreneurs</td>
+              <td contenteditable="true">Political challenges due to concerns about dependency</td>
+              <td contenteditable="true" class="impact-low">Low</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Policy makers, public opinion</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('incomeTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('incomeModal')" style="margin-left: 10px;">Write Net
+          Assessment</button>
+      </div>
+
+      <!-- Microcredit Table -->
+      <div class="table-editor">
+        <h3>3. Microcredit (5 points)</h3>
+        <div class="section-tip" style="margin-bottom: 10px;">
+          Small loans provided to entrepreneurs and small businesses that lack access to traditional banking services.
+        </div>
+        <div class="table-container">
+          <table id="microcreditTable">
+            <tr>
+              <th width="25%">Benefits</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+              <th width="25%">Costs</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Provides financial access to underserved communities</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Unbanked populations, rural communities</td>
+              <td contenteditable="true">Interest rates can be significantly higher than traditional loans</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Borrowers, small businesses</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Promotes entrepreneurship and local business development</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Small entrepreneurs, local economies</td>
+              <td contenteditable="true">Risk of over-indebtedness and debt traps for borrowers</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Vulnerable borrowers, families</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Empowers marginalized groups, particularly women</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Women, marginalized communities</td>
+              <td contenteditable="true">High administrative costs for managing many small loans</td>
+              <td contenteditable="true" class="impact-low">Low</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Microcredit institutions</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Creates pathways to formal financial inclusion</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Borrowers, financial system</td>
+              <td contenteditable="true">May not address structural causes of poverty</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Communities, policymakers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('microcreditTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('microcreditModal')" style="margin-left: 10px;">Write Net
+          Assessment</button>
+      </div>
+
+      <!-- Labor Unions Table -->
+      <div class="table-editor">
+        <h3>4. Labour Unions (5 points)</h3>
+        <div class="section-tip" style="margin-bottom: 10px;">
+          Organizations formed by workers to negotiate with employers on wages, benefits, and working conditions.
+        </div>
+        <div class="table-container">
+          <table id="unionTable">
+            <tr>
+              <th width="25%">Benefits</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+              <th width="25%">Costs</th>
+              <th width="15%">Impact</th>
+              <th width="10%">Time</th>
+              <th width="15%">Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Improved wages and working conditions</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Union members, workers</td>
+              <td contenteditable="true">Potential increase in production costs</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Employers, businesses</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Collective bargaining power for workers</td>
+              <td contenteditable="true" class="impact-high">High</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Workers, labor market</td>
+              <td contenteditable="true">Reduced flexibility in labor markets</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Businesses, economy</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Increased workplace safety standards</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Workers, workplace environment</td>
+              <td contenteditable="true">Union dues and fees create costs for workers</td>
+              <td contenteditable="true" class="impact-low">Low</td>
+              <td contenteditable="true" class="time-short">ST</td>
+              <td contenteditable="true">Union members</td>
+            </tr>
+            <tr>
+              <td contenteditable="true">Political advocacy for worker-friendly legislation</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-long">LT</td>
+              <td contenteditable="true">Workers, policy environment</td>
+              <td contenteditable="true">Potential adversarial relationship with management</td>
+              <td contenteditable="true" class="impact-medium">Medium</td>
+              <td contenteditable="true" class="time-medium">MT</td>
+              <td contenteditable="true">Workplace culture, productivity</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('unionTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('unionModal')" style="margin-left: 10px;">Write Net
+          Assessment</button>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage(5)">Go Back</button>
+        <button onclick="nextPage(7)">Next: Review & Export</button>
+      </div>
+    </div>
+    <!-- Page 7: Review & Export -->
+    <div id="page7" class="section page">
+      <h2>Review & Export</h2>
+      <p class="info">Review your work before exporting. Make sure you've completed all sections and met the
+        requirements.</p>
+
+      <div class="section-tip">
+        <h3>Assignment Checklist:</h3>
+        <ul>
+          <li><strong>Anticipation Guide:</strong> Completed with both initial and final opinions</li>
+          <li><strong>Cover Page:</strong> Includes name, teacher's name, date, title</li>
+          <li><strong>Part I: Opinion Column (600 words):</strong>
+            <ul>
+              <li>Strong introduction with hook, context, and thesis</li>
+              <li>Analysis of 3-4 key statements from your Anticipation Guide</li>
+              <li>Clear conclusion summarizing your evolved thinking</li>
+            </ul>
+          </li>
+          <li><strong>Part II: Academic Essay (600 words):</strong>
+            <ul>
+              <li>Clear position on the Malthus-Picketty spectrum</li>
+              <li>Well-structured introduction with thesis statement</li>
+              <li>Body paragraphs with supporting evidence and analysis</li>
+              <li>Explanation of how your position has changed (or not)</li>
+              <li>Strong conclusion with implications</li>
+            </ul>
+          </li>
+          <li><strong>Part III: Comprehensive Cost-Benefit Analysis:</strong>
+            <ul>
+              <li>Tax system analysis with impact levels, timeframes, and stakeholders (5 points)</li>
+              <li>Guaranteed annual income analysis with multiple dimensions (5 points)</li>
+              <li>Microcredit analysis including comprehensive evaluation (5 points)</li>
+              <li>Labour unions analysis with detailed assessment (5 points)</li>
+              <li>Net assessment for each economic concept</li>
+            </ul>
+          </li>
+          <li><strong>Formatting:</strong> Double-spaced, revised, edited, proofread with exact word count</li>
+        </ul>
+      </div>
+
+      <div class="section-tip" style="margin-top: 20px;">
+        <h3>Final Tips:</h3>
+        <ul>
+          <li><strong>Insightful Title:</strong> Make sure your title is unique and reflects your analysis</li>
+          <li><strong>Coherence:</strong> Ensure your arguments and analysis are consistent across all parts</li>
+          <li><strong>Word Count:</strong> Verify you've met the 600-word requirement for each essay</li>
+          <li><strong>Economic Terminology:</strong> Use appropriate economic concepts and terminology throughout</li>
+          <li><strong>Proofreading:</strong> Check for spelling, grammar, and punctuation errors</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage(6)">Go Back</button>
+        <button onclick="saveDocument()">Export Document</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 CIA4U AOL #2 Planner. All rights reserved.</p>
+    <div class="motivation"></div>
+  </footer>
+
+  <script>
+    // Translation dictionary for dual-language support
+    const translations = {
+      // Page titles and navigation
+      "Assignment Overview": "作业概述",
+      "Anticipation Guide": "预期指南",
+      "Cover Page Details": "封面页详情",
+      "Opinion Column": "观点专栏",
+      "Academic Essay": "学术论文",
+      "Comprehensive Cost-Benefit Analysis": "综合成本效益分析",
+      "Review & Export": "检查与导出",
+      "Go Back": "返回",
+      "Next": "下一步",
+      "Export Document": "导出文档",
+
+      // Assignment overview content
+      "Due at the end of Unit 2, worth 15% of your final grade.": "在单元2结束时提交，占最终成绩的15%。",
+      "Choose an insightful, telling title which demonstrates something unique about your analysis in both Parts I and II.": "选择一个有见地的标题，展示你在第一和第二部分分析中的独特之处。",
+      "Double spaced, revised, edited, proofread with your name, teacher's name, date, and exact word count.": "双倍行距，修订，编辑，校对，包含你的名字，老师的名字，日期和确切字数。",
+      "Will trigger the MLS' ZERO TOLERANCE academic dishonesty policy!": "将触发MLS'零容忍'学术不诚实政策！",
+      "Your assignment has three main components:": "你的作业有三个主要部分：",
+      "Opinion Column (600 words)": "观点专栏（600字）",
+      "Revisit your Anticipation Guide and compare your initial and final opinions.": "重新审视你的预期指南，比较你的初始和最终观点。",
+      "Academic Essay (600 words)": "学术论文（600字）",
+      "Reflect on your position between Malthus and Picketty.": "思考你在马尔萨斯和皮凯蒂之间的立场。",
+      "Econochart": "经济图表",
+      "Create a comprehensive cost-benefit analysis for tax system changes, guaranteed annual income, microcredit, and labor unions.": "为税收制度变革、保障性年收入、小额信贷和劳工联盟创建全面的成本效益分析。",
+
+      // Anticipation Guide
+      "Complete this anticipation guide by indicating whether you agree or disagree with each statement. You will revisit these opinions in Part I of your assignment.": "通过指明你是否同意每个陈述来完成这个预期指南。你将在作业的第一部分重新审视这些观点。",
+      "Statement": "陈述",
+      "Initial Opinion": "初始观点",
+      "Final Opinion": "最终观点",
+      "Agree": "同意",
+      "Disagree": "不同意",
+      "Fill out the \"Initial Opinion\" column now, before completing the unit activities.": "在完成单元活动之前，现在填写\"初始观点\"栏。",
+      "After completing your unit activities, fill out the \"Final Opinion\" column.": "完成单元活动后，填写\"最终观点\"栏。",
+      "In Part I of your assignment, you will analyze how and why your opinions changed (or didn't change).": "在作业的第一部分，你将分析你的观点如何以及为什么改变（或没有改变）。",
+
+      // Cover Page
+      "Enter your cover page information. These details will appear on your downloaded document.": "输入你的封面页信息。这些详细信息将出现在你下载的文档中。",
+      "Student's Name:": "学生姓名：",
+      "Teacher's Name:": "老师姓名：",
+      "Course Code:": "课程代码：",
+      "Date:": "日期：",
+      "Assignment Title:": "作业标题：",
+
+      // Opinion Column
+      "Revisit the Anticipation Guide you completed earlier, and analyze how your opinions have changed after completing the unit activities.": "重新审视你之前完成的预期指南，并分析在完成单元活动后你的观点如何改变。",
+      "Introduction (Suggested: 100-150 words):": "引言（建议：100-150字）：",
+      "Engage your readers with a strong opening and establish your purpose.": "以强有力的开头吸引读者并确立你的目的。",
+      "Introduction:": "引言：",
+      "Start with an engaging hook (surprising statistic, provocative question, or relevant quote about economics). Provide context about your initial economic perspective. Clearly state your thesis (how your economic thinking has evolved during this unit).": "以引人入胜的钩子开始（令人惊讶的统计数据、发人深省的问题或相关的经济学引述）。提供有关你初始经济观点的背景。清楚地陈述你的论点（你的经济思维在本单元期间如何演变）。",
+      "Components of a strong introduction:": "强有力引言的组成部分：",
+      "Hook:": "钩子：",
+      "Capture reader's attention with a provocative question, surprising statistic, or compelling quote": "通过发人深省的问题、令人惊讶的统计数据或引人入胜的引述来吸引读者的注意力",
+      "Context:": "背景：",
+      "Briefly explain your initial economic perspective": "简要解释你最初的经济观点",
+      "Thesis:": "论点：",
+      "Clearly state how your economic thinking has evolved (or stayed consistent)": "清楚地陈述你的经济思维如何演变（或保持一致）",
+
+      // Add key parts for the Cost-Benefit Analysis
+      "Components of Comprehensive Cost-Benefit Analysis:": "综合成本效益分析的组成部分：",
+      "Impact Level:": "影响程度：",
+      "High, Medium, or Low significance": "高、中或低重要性",
+      "Timeframe:": "时间框架：",
+      "Short-term (ST), Medium-term (MT), or Long-term (LT)": "短期（ST）、中期（MT）或长期（LT）",
+      "Primary Stakeholders:": "主要利益相关者：",
+      "Who is most affected": "最受影响的人",
+      "Net Assessment:": "净评估：",
+      "Overall evaluation of whether benefits outweigh costs": "总体评估收益是否超过成本",
+
+      // Cost-benefit analysis tables
+      "Changing the Tax System (5 points)": "改变税收制度（5分）",
+      "Guaranteed Annual Income (5 points)": "保障性年收入（5分）",
+      "Microcredit (5 points)": "小额信贷（5分）",
+      "Labour Unions (5 points)": "劳工联盟（5分）",
+      "Benefits": "收益",
+      "Impact": "影响",
+      "Time": "时间",
+      "Stakeholders": "利益相关者",
+      "Costs": "成本",
+      "Write Net Assessment": "撰写净评估",
+
+      // Malthus-Picketty spectrum
+      "Your Position on the Economic Spectrum": "你在经济光谱上的立场",
+      "Malthus": "马尔萨斯",
+      "Resource scarcity": "资源稀缺",
+      "Middle Ground": "中间立场",
+      "Picketty": "皮凯蒂",
+      "Wealth inequality": "贫富不均",
+      "Understanding the spectrum:": "理解光谱：",
+      "Brief description of your position:": "简要描述你的立场：",
+
+      // Review and export
+      "Review your work before exporting. Make sure you've completed all sections and met the requirements.": "在导出前检查你的工作。确保你已完成所有部分并满足要求。",
+      "Assignment Checklist:": "作业清单：",
+      "Completed with both initial and final opinions": "已完成初始和最终观点",
+      "Includes name, teacher's name, date, title": "包括姓名、老师姓名、日期、标题",
+      "Strong introduction with hook, context, and thesis": "包含钩子、背景和论点的强有力引言",
+      "Analysis of 3-4 key statements from your Anticipation Guide": "分析来自预期指南的3-4个关键陈述",
+      "Clear conclusion summarizing your evolved thinking": "清晰的结论总结你的思想演变",
+      "Clear position on the Malthus-Picketty spectrum": "在马尔萨斯-皮凯蒂光谱上的明确立场",
+      "Well-structured introduction with thesis statement": "包含论点陈述的结构良好的引言",
+      "Body paragraphs with supporting evidence and analysis": "包含支持证据和分析的正文段落",
+      "Explanation of how your position has changed (or not)": "解释你的立场如何改变（或未改变）",
+      "Strong conclusion with implications": "包含影响的有力结论",
+      "Tax system analysis with impact levels, timeframes, and stakeholders (5 points)": "包含影响程度、时间框架和利益相关者的税收制度分析（5分）",
+      "Guaranteed annual income analysis with multiple dimensions (5 points)": "包含多个维度的保障性年收入分析（5分）",
+      "Microcredit analysis including comprehensive evaluation (5 points)": "包含全面评估的小额信贷分析（5分）",
+      "Labour unions analysis with detailed assessment (5 points)": "包含详细评估的劳工联盟分析（5分）",
+      "Net assessment for each economic concept": "每个经济概念的净评估",
+      "Double-spaced, revised, edited, proofread with exact word count": "双倍行距，修订，编辑，校对，包含确切字数",
+
+      // Final tips
+      "Final Tips:": "最终提示：",
+      "Insightful Title:": "有见地的标题：",
+      "Make sure your title is unique and reflects your analysis": "确保你的标题是独特的并反映你的分析",
+      "Coherence:": "连贯性：",
+      "Ensure your arguments and analysis are consistent across all parts": "确保你的论点和分析在所有部分中保持一致",
+      "Word Count:": "字数：",
+      "Verify you've met the 600-word requirement for each essay": "确认你已达到每篇论文600字的要求",
+      "Economic Terminology:": "经济术语：",
+      "Use appropriate economic concepts and terminology throughout": "在整个过程中使用适当的经济概念和术语",
+      "Proofreading:": "校对：",
+      "Check for spelling, grammar, and punctuation errors": "检查拼写、语法和标点错误"
+    };
+
+    // Modified approach - avoid applying translations as spans
+    function applyTranslations() {
+      // We won't actually modify the DOM with translation spans
+      // This function is kept to maintain compatibility with any existing calls
+      console.log("Translations ready for export document");
+    }
+    // Update Progress Bar
+    function updateProgress() {
+      const activePage = document.querySelector(".page.active");
+      if (!activePage) return;
+
+      const activePageNum = parseInt(activePage.id.replace("page", ""));
+      const progress = (activePageNum / 7) * 100;
+      const progressBar = document.querySelector(".progress");
+      if (progressBar) {
+        progressBar.style.width = `${progress}%`;
+      }
+    }
+
+    // Navigation Functions
+    function nextPage(pageNumber) {
+      // Hide all pages
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+
+      // Show the selected page
+      const nextPageElement = document.getElementById('page' + pageNumber);
+      if (nextPageElement) {
+        nextPageElement.classList.add('active');
+      }
+
+      // Update progress bar
+      updateProgress();
+
+      // Update preview
+      updatePreview();
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function prevPage(pageNumber) {
+      // Hide all pages
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+
+      // Show the selected page
+      const prevPageElement = document.getElementById('page' + pageNumber);
+      if (prevPageElement) {
+        prevPageElement.classList.add('active');
+      }
+
+      // Update progress bar
+      updateProgress();
+
+      // Update preview
+      updatePreview();
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+
+      // Store preference in localStorage
+      if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    }
+
+    // Easter Egg: Double-click header to trigger rainbow animation
+    function triggerRainbow() {
+      document.body.style.animation = 'rainbow 5s infinite';
+      setTimeout(() => {
+        document.body.style.animation = 'gradientBG 15s ease infinite';
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      }, 5000);
+    }
+
+    // Spectrum Position Marker Dragging - Fixed version
+    function initializeSpectrumDrag() {
+      const marker = document.getElementById('positionMarker');
+      const positionInput = document.getElementById('spectrumPosition');
+
+      if (!marker || !positionInput) return;
+
+      // Initial marker positioning (centered by default)
+      const position = parseInt(positionInput.value) || 50;
+      marker.style.left = position + '%';
+      updatePositionDescription(position);
+
+      let isDragging = false;
+
+      // Desktop Events
+      marker.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        isDragging = true;
+      });
+
+      document.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+        moveMarker(e.clientX);
+      });
+
+      document.addEventListener('mouseup', function () {
+        isDragging = false;
+      });
+
+      // Mobile Events
+      marker.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        isDragging = true;
+      });
+
+      document.addEventListener('touchmove', function (e) {
+        if (!isDragging) return;
+        moveMarker(e.touches[0].clientX);
+      });
+
+      document.addEventListener('touchend', function () {
+        isDragging = false;
+      });
+
+      // Also allow clicking directly on the spectrum
+      const spectrum = document.querySelector('.spectrum');
+      if (spectrum) {
+        spectrum.addEventListener('click', function (e) {
+          moveMarker(e.clientX);
+        });
+      }
+
+      function moveMarker(clientX) {
+        const spectrum = document.querySelector('.spectrum');
+        if (!spectrum) return;
+
+        const rect = spectrum.getBoundingClientRect();
+
+        // Calculate position with boundaries
+        let position = ((clientX - rect.left) / rect.width) * 100;
+        position = Math.max(0, Math.min(position, 100));
+
+        marker.style.left = position + '%';
+        positionInput.value = Math.round(position);
+
+        updatePositionDescription(position);
+      }
+    }
+
+    function updatePositionDescription(position) {
+      const description = document.getElementById('positionDescription');
+      if (!description) return;
+
+      if (position < 20) {
+        description.value = "Strongly Malthusian: Resource scarcity is the primary economic challenge, with population growth outpacing resources";
+      } else if (position < 40) {
+        description.value = "Moderately Malthusian: Resource constraints are significant, but not the only economic challenge";
+      } else if (position < 60) {
+        description.value = "Balanced view: Both resource constraints and wealth inequality are important economic concerns";
+      } else if (position < 80) {
+        description.value = "Moderately Pickettian: Wealth inequality is a major economic concern, with some consideration for resource limitations";
+      } else {
+        description.value = "Strongly Pickettian: Wealth inequality and capital concentration are the primary economic challenges";
+      }
+    }
+
+    // Add Row to Tables - Fixed version
+    function addRow(tableId) {
+      const table = document.getElementById(tableId);
+      if (!table) return;
+
+      const newRow = table.insertRow(-1); // Add at the end
+
+      // Create 8 cells for the enhanced tables
+      for (let i = 0; i < 8; i++) {
+        const cell = newRow.insertCell(i);
+        cell.contentEditable = "true";
+
+        // Add appropriate classes for impact and time cells
+        if (i === 1 || i === 5) { // Impact columns
+          cell.addEventListener('blur', function () {
+            updateImpactClass(this);
+          });
+        } else if (i === 2 || i === 6) { // Time columns
+          cell.addEventListener('blur', function () {
+            updateTimeClass(this);
+          });
+        }
+      }
+    }
+
+    // Helper functions for cell styling
+    function updateImpactClass(cell) {
+      // Remove all impact classes
+      cell.classList.remove('impact-high', 'impact-medium', 'impact-low');
+
+      // Add appropriate class based on content
+      const content = cell.textContent.trim().toLowerCase();
+      if (content.includes('high')) {
+        cell.classList.add('impact-high');
+      } else if (content.includes('medium')) {
+        cell.classList.add('impact-medium');
+      } else if (content.includes('low')) {
+        cell.classList.add('impact-low');
+      }
+    }
+
+    function updateTimeClass(cell) {
+      // Remove all time classes
+      cell.classList.remove('time-short', 'time-medium', 'time-long');
+
+      // Add appropriate class based on content
+      const content = cell.textContent.trim().toLowerCase();
+      if (content.includes('st') || content.includes('short')) {
+        cell.classList.add('time-short');
+      } else if (content.includes('mt') || content.includes('medium')) {
+        cell.classList.add('time-medium');
+      } else if (content.includes('lt') || content.includes('long')) {
+        cell.classList.add('time-long');
+      }
+    }
+
+    // Modals for Net Assessment
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = "block";
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    // Make table cells editable and add impact classes - Fixed version
+    function setupTableCells() {
+      const tables = ['taxTable', 'incomeTable', 'microcreditTable', 'unionTable'];
+
+      tables.forEach(tableId => {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+
+        const rows = table.rows;
+
+        for (let i = 1; i < rows.length; i++) { // Skip header row
+          if (!rows[i]) continue;
+
+          const cells = rows[i].cells;
+          if (!cells) continue;
+
+          // Set up impact column classes
+          if (cells[1]) {
+            updateImpactClass(cells[1]);
+            cells[1].addEventListener('blur', function () {
+              updateImpactClass(this);
+            });
+          }
+
+          if (cells[5]) {
+            updateImpactClass(cells[5]);
+            cells[5].addEventListener('blur', function () {
+              updateImpactClass(this);
+            });
+          }
+
+          // Set up time column classes
+          if (cells[2]) {
+            updateTimeClass(cells[2]);
+            cells[2].addEventListener('blur', function () {
+              updateTimeClass(this);
+            });
+          }
+
+          if (cells[6]) {
+            updateTimeClass(cells[6]);
+            cells[6].addEventListener('blur', function () {
+              updateTimeClass(this);
+            });
+          }
+        }
+      });
+    }
+
+    // Motivational Messages
+    const messages = [
+      "You're making great progress with your economic analysis! 💪",
+      "Your insights are taking shape! 🚀",
+      "One step closer to completing your AOL! 🌟",
+      "Your economic perspective is valuable! 🔍",
+      "Keep going - your analysis is looking excellent! 🎯"
+    ];
+
+    function updateMotivation() {
+      const motivationElement = document.querySelector('.motivation');
+      if (motivationElement) {
+        motivationElement.innerText = messages[Math.floor(Math.random() * messages.length)];
+      }
+    }
+
+    // Live Preview: Update preview content - Fixed for all pages
+    function updatePreview() {
+      const previewContent = document.querySelector('.preview-content');
+      if (!previewContent) return;
+
+      const activePage = document.querySelector(".page.active");
+      if (!activePage) return;
+
+      const activePageId = activePage.id;
+      let previewHTML = "";
+
+      if (activePageId === "page4") {
+        // Opinion Column Preview
+        const intro = document.getElementById('opinionIntro')?.value || "";
+        const statement1 = document.getElementById('opinionStatement1')?.value || "";
+        const statement2 = document.getElementById('opinionStatement2')?.value || "";
+        const statement3 = document.getElementById('opinionStatement3')?.value || "";
+        const statement4 = document.getElementById('opinionStatement4')?.value || "";
+        const conclusion = document.getElementById('opinionConclusion')?.value || "";
+
+        previewHTML = `<h4>Opinion Column Preview</h4>
+        <p>${intro || "<em>Add your introduction...</em>"}</p>
+        <p>${statement1 || "<em>Add your first statement analysis...</em>"}</p>
+        <p>${statement2 || "<em>Add your second statement analysis...</em>"}</p>
+        <p>${statement3 || "<em>Add your third statement analysis...</em>"}</p>
+        ${statement4 ? `<p>${statement4}</p>` : ''}
+        <p>${conclusion || "<em>Add your conclusion...</em>"}</p>
+        <hr>
+        <p><em>Current word count: ${countWords(intro + " " + statement1 + " " + statement2 + " " + statement3 + " " + statement4 + " " + conclusion)}/600</em></p>`;
+      }
+      else if (activePageId === "page5") {
+        // Academic Essay Preview
+        const intro = document.getElementById('academicIntro')?.value || "";
+        const body1 = document.getElementById('academicBody1')?.value || "";
+        const body2 = document.getElementById('academicBody2')?.value || "";
+        const body3 = document.getElementById('academicBody3')?.value || "";
+        const conclusion = document.getElementById('academicConclusion')?.value || "";
+        const position = document.getElementById('positionDescription')?.value || "";
+
+        previewHTML = `<h4>Academic Essay Preview</h4>
+        <p><strong>Position:</strong> ${position || "<em>Drag the marker to set your position...</em>"}</p>
+        <p>${intro || "<em>Add your introduction...</em>"}</p>
+        <p>${body1 || "<em>Add your first body paragraph...</em>"}</p>
+        <p>${body2 || "<em>Add your second body paragraph...</em>"}</p>
+        <p>${body3 || "<em>Add your third body paragraph...</em>"}</p>
+        <p>${conclusion || "<em>Add your conclusion...</em>"}</p>
+        <hr>
+        <p><em>Current word count: ${countWords(intro + " " + body1 + " " + body2 + " " + body3 + " " + conclusion)}/600</em></p>`;
+      }
+      else if (activePageId === "page6") {
+        // Cost-Benefit Analysis Preview
+        const taxAssessment = document.getElementById('taxAssessment')?.value || "";
+        const incomeAssessment = document.getElementById('incomeAssessment')?.value || "";
+        const microcreditAssessment = document.getElementById('microcreditAssessment')?.value || "";
+        const unionAssessment = document.getElementById('unionAssessment')?.value || "";
+
+        previewHTML = `<h4>Cost-Benefit Analysis Preview</h4>
+        <p>You're creating comprehensive cost-benefit analyses for:</p>
+        <ul>
+          <li>Changing the Tax System</li>
+          <li>Guaranteed Annual Income</li>
+          <li>Microcredit</li>
+          <li>Labour Unions</li>
+        </ul>
+        <p><em>Each analysis includes benefits, costs, impact levels, timeframes, and stakeholder considerations.</em></p>`;
+
+        // Show net assessments that have been started
+        const assessments = [];
+        if (taxAssessment) assessments.push(`<p><strong>Tax System:</strong> ${taxAssessment.substring(0, 100)}${taxAssessment.length > 100 ? '...' : ''}</p>`);
+        if (incomeAssessment) assessments.push(`<p><strong>Guaranteed Income:</strong> ${incomeAssessment.substring(0, 100)}${incomeAssessment.length > 100 ? '...' : ''}</p>`);
+        if (microcreditAssessment) assessments.push(`<p><strong>Microcredit:</strong> ${microcreditAssessment.substring(0, 100)}${microcreditAssessment.length > 100 ? '...' : ''}</p>`);
+        if (unionAssessment) assessments.push(`<p><strong>Labour Unions:</strong> ${unionAssessment.substring(0, 100)}${unionAssessment.length > 100 ? '...' : ''}</p>`);
+
+        if (assessments.length > 0) {
+          previewHTML += `<h5>Net Assessments Started:</h5>${assessments.join('')}`;
+        }
+      }
+      else if (activePageId === "page2") {
+        // Anticipation Guide Preview
+        let guidePreview = "<h4>Anticipation Guide Preview</h4><p><strong>Selected opinions:</strong></p><ul>";
+        let hasSelections = false;
+
+        for (let i = 1; i <= 10; i++) {
+          const initialElement = document.querySelector(`input[name="initial${i}"]:checked`);
+          const finalElement = document.querySelector(`input[name="final${i}"]:checked`);
+
+          const initial = initialElement ? initialElement.value : "not selected";
+          const final = finalElement ? finalElement.value : "not selected";
+
+          if (initialElement || finalElement) {
+            hasSelections = true;
+            guidePreview += `<li>Statement ${i}: Initial - ${initial}, Final - ${final}</li>`;
+          }
+        }
+
+        if (!hasSelections) {
+          guidePreview += "<li><em>No opinions selected yet</em></li>";
+        }
+
+        guidePreview += "</ul><p><em>Complete all statements to prepare for your analysis.</em></p>";
+        previewHTML = guidePreview;
+      }
+      else if (activePageId === "page3") {
+        // Cover Page Preview
+        const studentName = document.getElementById('coverStudent')?.value || "";
+        const teacherName = document.getElementById('coverTeacher')?.value || "";
+        const date = document.getElementById('coverDate')?.value || "";
+        const title = document.getElementById('coverTitle')?.value || "";
+
+        previewHTML = `<h4>Cover Page Preview</h4>
+        <p><strong>Title:</strong> ${title || "<em>Add a title...</em>"}</p>
+        <p><strong>Student:</strong> ${studentName || "<em>Add your name...</em>"}</p>
+        <p><strong>Teacher:</strong> ${teacherName || "Dr. Dan Zebeljan"}</p>
+        <p><strong>Date:</strong> ${date ? new Date(date).toDateString() : "<em>Select a date...</em>"}</p>`;
+      }
+      else if (activePageId === "page7") {
+        // Export Preview
+        const studentName = document.getElementById('coverStudent')?.value || "Student Name";
+
+        previewHTML = `<h4>Document Ready for Export</h4>
+        <p>Your assignment is ready to export. Click the "Export Document" button to download your work as a Word document.</p>
+        <p>Filename: ${studentName.replace(/\s+/g, '_') || "Student"}_AOL2.doc</p>
+        <p><em>Note: The document will include all your entered information across all sections.</em></p>`;
+      }
+      else {
+        previewHTML = `<p>Navigate to different sections to see a preview of your work.</p>`;
+      }
+
+      previewContent.innerHTML = previewHTML;
+    }
+
+    // Word Count Utility - Fixed for accuracy
+    function countWords(text) {
+      if (!text) return 0;
+      return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    }
+
+    // Toggle Preview Pane
+    function togglePreview() {
+      const previewContent = document.querySelector('.preview-content');
+      const toggleButton = document.getElementById('previewToggle');
+
+      if (!previewContent || !toggleButton) return;
+
+      if (previewContent.style.display === 'none') {
+        previewContent.style.display = 'block';
+        toggleButton.textContent = 'Collapse';
+      } else {
+        previewContent.style.display = 'none';
+        toggleButton.textContent = 'Expand';
+      }
+    }
+
+    // Export Document - Completely revised
+    function actuallyExportDocument() {
+      try {
+        // Trigger confetti animation
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
+        // Gather all content with proper null checks
+        const studentName = document.getElementById('coverStudent')?.value || "Student Name";
+        const teacherName = document.getElementById('coverTeacher')?.value || "Dr. Dan Zebeljan";
+        const courseCode = document.getElementById('coverCourse')?.value || "CIA4U-AOL2";
+        const dateInput = document.getElementById('coverDate')?.value;
+        const date = dateInput ? new Date(dateInput).toDateString() : new Date().toDateString();
+        const title = document.getElementById('coverTitle')?.value || "Economic Analysis and Perspective";
+
+        // Anticipation Guide - Fixed data extraction
+        function getAnticipationGuideData() {
+          const guideData = [];
+          const table = document.getElementById('anticipationTable');
+          if (!table) return guideData;
+
+          const rows = table.rows;
+          // Skip header row, start at 1
+          for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row) continue;
+
+            const cells = row.cells;
+            if (!cells || cells.length < 4) continue;
+
+            const number = cells[0]?.innerText.trim() || i;
+            const statement = cells[1]?.innerText.trim() || "";
+            const statementClean = statement.split('\n')[0]; // Just get English part
+
+            // Find selected radio buttons for this row
+            const radioInitial = document.querySelector(`input[name="initial${number}"]:checked`);
+            const radioFinal = document.querySelector(`input[name="final${number}"]:checked`);
+
+            guideData.push({
+              number: number,
+              statement: statementClean,
+              initial: radioInitial?.value || "",
+              final: radioFinal?.value || ""
+            });
+          }
+          return guideData;
+        }
+
+        const anticipationData = getAnticipationGuideData();
+
+        // Part I: Opinion Column
+        const opinionIntro = document.getElementById('opinionIntro')?.value || "";
+        const opinionStatement1 = document.getElementById('opinionStatement1')?.value || "";
+        const opinionStatement2 = document.getElementById('opinionStatement2')?.value || "";
+        const opinionStatement3 = document.getElementById('opinionStatement3')?.value || "";
+        const opinionStatement4 = document.getElementById('opinionStatement4')?.value || "";
+        const opinionConclusion = document.getElementById('opinionConclusion')?.value || "";
+
+        // Part II: Academic Essay
+        const position = document.getElementById('positionDescription')?.value || "";
+        const academicIntro = document.getElementById('academicIntro')?.value || "";
+        const academicBody1 = document.getElementById('academicBody1')?.value || "";
+        const academicBody2 = document.getElementById('academicBody2')?.value || "";
+        const academicBody3 = document.getElementById('academicBody3')?.value || "";
+        const academicConclusion = document.getElementById('academicConclusion')?.value || "";
+
+        // Get Net Assessments
+        const taxAssessment = document.getElementById('taxAssessment')?.value || "";
+        const incomeAssessment = document.getElementById('incomeAssessment')?.value || "";
+        const microcreditAssessment = document.getElementById('microcreditAssessment')?.value || "";
+        const unionAssessment = document.getElementById('unionAssessment')?.value || "";
+
+        // Function to safely extract table data
+        function getTableData(tableId) {
+          const table = document.getElementById(tableId);
+          if (!table) return [];
+
+          const rows = [];
+          // Skip header row
+          for (let i = 1; i < table.rows.length; i++) {
+            const tableRow = table.rows[i];
+            if (!tableRow || !tableRow.cells || tableRow.cells.length < 8) continue;
+
+            // Only add rows that have content
+            if (tableRow.cells[0].innerText.trim() || tableRow.cells[4].innerText.trim()) {
+              rows.push({
+                benefit: tableRow.cells[0].innerText.trim(),
+                benefitImpact: tableRow.cells[1].innerText.trim(),
+                benefitTime: tableRow.cells[2].innerText.trim(),
+                benefitStakeholders: tableRow.cells[3].innerText.trim(),
+                cost: tableRow.cells[4].innerText.trim(),
+                costImpact: tableRow.cells[5].innerText.trim(),
+                costTime: tableRow.cells[6].innerText.trim(),
+                costStakeholders: tableRow.cells[7].innerText.trim()
+              });
+            }
+          }
+          return rows;
+        }
+
+        // Part III: Econochart (all tables)
+        const taxTableData = getTableData('taxTable');
+        const incomeTableData = getTableData('incomeTable');
+        const microcreditTableData = getTableData('microcreditTable');
+        const unionTableData = getTableData('unionTable');
+
+        // Word counts
+        const opinionWordCount = countWords(opinionIntro + " " + opinionStatement1 + " " + opinionStatement2 + " " + opinionStatement3 + " " + opinionStatement4 + " " + opinionConclusion);
+        const academicWordCount = countWords(academicIntro + " " + academicBody1 + " " + academicBody2 + " " + academicBody3 + " " + academicConclusion);
+
+        // Generate translation spans for the document
+        function getTranslation(text) {
+          if (!text) return "";
+
+          const translation = translations[text];
+          if (translation) {
+            return `<span class="chinese">${translation}</span>`;
+          }
+          return "";
+        }
+
+        // Helper for impact class identification
+        function getImpactClass(text) {
+          if (!text) return "";
+          text = text.toLowerCase();
+          if (text.includes('high')) return "impact-high";
+          if (text.includes('medium')) return "impact-medium";
+          if (text.includes('low')) return "impact-low";
+          return "";
+        }
+
+        // Helper for time class identification
+        function getTimeClass(text) {
+          if (!text) return "";
+          text = text.toLowerCase();
+          if (text.includes('short') || text.includes('st')) return "time-short";
+          if (text.includes('medium') || text.includes('mt')) return "time-medium";
+          if (text.includes('long') || text.includes('lt')) return "time-long";
+          return "";
+        }
+
+        // Build the HTML document with MS Word compatible formatting
+        const htmlContent = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="ProgId" content="Word.Document">
+        <meta name="Generator" content="Microsoft Word 15">
+        <meta name="Originator" content="Microsoft Word 15">
+        <title>${title} - ${studentName}</title>
+        <!--[if gte mso 9]>
+        <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+          /* Word-specific styles */
+          @page WordSection1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in 1.0in 1.0in 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+          }
+          div.WordSection1 {
+            page: WordSection1;
+          }
+          /* General styling */
+          body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 2.0;
+            font-size: 12pt;
+          }
+          .cover-page {
+            text-align: center;
+            margin-top: 200pt;
+          }
+          .header {
+            text-align: left;
+            margin-bottom: 20pt;
+          }
+          h1, h2, h3 {
+            color: #333333;
+          }
+          p {
+            margin-bottom: 16pt;
+            text-align: justify;
+            line-height: 2.0;
+          }
+          .section {
+            margin-top: 40pt;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20pt 0;
+          }
+          th, td {
+            border: 1pt solid #dddddd;
+            padding: 8pt;
+            vertical-align: top;
+          }
+          th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+          }
+          .impact-high {
+            background-color: #ffe0e0;
+            font-weight: bold;
+          }
+          .impact-medium {
+            background-color: #fff0e0;
+          }
+          .impact-low {
+            background-color: #f0f0f0;
+          }
+          .time-short {
+            color: #1976D2;
+          }
+          .time-medium {
+            color: #7B1FA2;
+          }
+          .time-long {
+            color: #C2185B;
+          }
+          .word-count {
+            font-style: italic;
+            text-align: right;
+            margin-top: 10pt;
+          }
+          .page-break {
+            page-break-before: always;
+          }
+          .anticipation-guide {
+            margin: 20pt 0;
+          }
+          .assessment-box {
+            background-color: #f9f9f9;
+            border: 1pt solid #dddddd;
+            padding: 15pt;
+            margin-top: 10pt;
+          }
+          /* Chinese translation styles */
+          .chinese {
+            font-size: 10pt;
+            color: #666;
+            display: block;
+            margin-top: 3pt;
+          }
+/* Styling for Chinese text */
+.chinese-text {
+  display: block;
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2px;
+  font-weight: normal;
+}
+
+/* For inline elements where we want the translation to appear right after */
+.inline-chinese {
+  margin-left: 5px;
+  font-size: 0.85em;
+  color: #666;
+}
+
+/* For buttons, we might want special handling */
+button .chinese-text {
+  font-size: 0.8em;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Additional styling for table headers */
+th .chinese-text {
+  font-size: 0.8em;
+  font-weight: normal;
+}
+        </style>
+      </head>
+      <body>
+        <div class="WordSection1">
+          <!-- Cover Page -->
+          <div class="cover-page">
+            <h1>${title}</h1>
+            <p class="chinese">${translations["Assignment Title"] || "作业标题"}: ${title}</p>
+            <p>
+              ${studentName}<br>
+              ${teacherName}<br>
+              ${courseCode}<br>
+              ${date}
+            </p>
+          </div>
+          
+          <!-- Anticipation Guide -->
+          <div class="page-break"></div>
+          <div class="header">
+            <p>${studentName}<br>${teacherName}<br>${date}</p>
+          </div>
+          <div class="section">
+            <h2>Anticipation Guide</h2>
+            <p class="chinese">${translations["Anticipation Guide"] || "预期指南"}</p>
+            <table class="anticipation-guide">
+              <tr>
+                <th width="5%">#</th>
+                <th width="65%">Statement<br><span class="chinese">${translations["Statement"] || "陈述"}</span></th>
+                <th width="15%">Initial Opinion<br><span class="chinese">${translations["Initial Opinion"] || "初始观点"}</span></th>
+                <th width="15%">Final Opinion<br><span class="chinese">${translations["Final Opinion"] || "最终观点"}</span></th>
+              </tr>
+              ${anticipationData.map(row => `
+                <tr>
+                  <td>${row.number}</td>
+                  <td>${row.statement}</td>
+                  <td style="text-align: center;">${row.initial ? (row.initial.charAt(0).toUpperCase() + row.initial.slice(1)) : ""}</td>
+                  <td style="text-align: center;">${row.final ? (row.final.charAt(0).toUpperCase() + row.final.slice(1)) : ""}</td>
+                </tr>
+              `).join('')}
+            </table>
+          </div>
+          
+          <!-- Part I: Opinion Column -->
+          <div class="page-break"></div>
+          <div class="header">
+            <p>${studentName}<br>${teacherName}<br>${date}</p>
+          </div>
+          <div class="section">
+            <h2>Part I: Opinion Column</h2>
+            <p class="chinese">${translations["Opinion Column"] || "观点专栏"}</p>
+            <p>${opinionIntro}</p>
+            <p>${opinionStatement1}</p>
+            <p>${opinionStatement2}</p>
+            <p>${opinionStatement3}</p>
+            ${opinionStatement4 ? `<p>${opinionStatement4}</p>` : ''}
+            <p>${opinionConclusion}</p>
+            <p class="word-count">Word Count: ${opinionWordCount}/600</p>
+          </div>
+          
+          <!-- Part II: Academic Essay -->
+          <div class="page-break"></div>
+          <div class="section">
+            <h2>Part II: Academic Essay</h2>
+            <p class="chinese">${translations["Academic Essay"] || "学术论文"}</p>
+            <p><strong>Position on Malthus-Picketty Spectrum:</strong> ${position}</p>
+            <p>${academicIntro}</p>
+            <p>${academicBody1}</p>
+            <p>${academicBody2}</p>
+            <p>${academicBody3}</p>
+            <p>${academicConclusion}</p>
+            <p class="word-count">Word Count: ${academicWordCount}/600</p>
+          </div>
+          
+          <!-- Part III: Comprehensive Cost-Benefit Analysis -->
+          <div class="page-break"></div>
+          <div class="section">
+            <h2>Part III: Comprehensive Cost-Benefit Analysis</h2>
+            <p class="chinese">${translations["Comprehensive Cost-Benefit Analysis"] || "综合成本效益分析"}</p>
+            
+            <h3>1. Changing the Tax System</h3>
+            <p class="chinese">${translations["Changing the Tax System (5 points)"] || "改变税收制度（5分）"}</p>
+            <table>
+              <tr>
+                <th>Benefits<br><span class="chinese">${translations["Benefits"] || "收益"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+                <th>Costs<br><span class="chinese">${translations["Costs"] || "成本"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+              </tr>
+              ${taxTableData.map(row => `
+                <tr>
+                  <td>${row.benefit}</td>
+                  <td class="${getImpactClass(row.benefitImpact)}">${row.benefitImpact}</td>
+                  <td class="${getTimeClass(row.benefitTime)}">${row.benefitTime}</td>
+                  <td>${row.benefitStakeholders}</td>
+                  <td>${row.cost}</td>
+                  <td class="${getImpactClass(row.costImpact)}">${row.costImpact}</td>
+                  <td class="${getTimeClass(row.costTime)}">${row.costTime}</td>
+                  <td>${row.costStakeholders}</td>
+                </tr>
+              `).join('')}
+            </table>
+            ${taxAssessment ? `
+            <div class="assessment-box">
+              <h4>Net Assessment:</h4>
+              <p class="chinese">${translations["Net Assessment"] || "净评估"}:</p>
+              <p>${taxAssessment}</p>
+            </div>` : ''}
+            
+            <h3>2. Guaranteed Annual Income</h3>
+            <p class="chinese">${translations["Guaranteed Annual Income (5 points)"] || "保障性年收入（5分）"}</p>
+            <table>
+              <tr>
+                <th>Benefits<br><span class="chinese">${translations["Benefits"] || "收益"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+                <th>Costs<br><span class="chinese">${translations["Costs"] || "成本"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+              </tr>
+              ${incomeTableData.map(row => `
+                <tr>
+                  <td>${row.benefit}</td>
+                  <td class="${getImpactClass(row.benefitImpact)}">${row.benefitImpact}</td>
+                  <td class="${getTimeClass(row.benefitTime)}">${row.benefitTime}</td>
+                  <td>${row.benefitStakeholders}</td>
+                  <td>${row.cost}</td>
+                  <td class="${getImpactClass(row.costImpact)}">${row.costImpact}</td>
+                  <td class="${getTimeClass(row.costTime)}">${row.costTime}</td>
+                  <td>${row.costStakeholders}</td>
+                </tr>
+              `).join('')}
+            </table>
+            ${incomeAssessment ? `
+            <div class="assessment-box">
+              <h4>Net Assessment:</h4>
+              <p class="chinese">${translations["Net Assessment"] || "净评估"}:</p>
+              <p>${incomeAssessment}</p>
+            </div>` : ''}
+            
+            <h3>3. Microcredit</h3>
+            <p class="chinese">${translations["Microcredit (5 points)"] || "小额信贷（5分）"}</p>
+            <table>
+              <tr>
+                <th>Benefits<br><span class="chinese">${translations["Benefits"] || "收益"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+                <th>Costs<br><span class="chinese">${translations["Costs"] || "成本"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+              </tr>
+              ${microcreditTableData.map(row => `
+                <tr>
+                  <td>${row.benefit}</td>
+                  <td class="${getImpactClass(row.benefitImpact)}">${row.benefitImpact}</td>
+                  <td class="${getTimeClass(row.benefitTime)}">${row.benefitTime}</td>
+                  <td>${row.benefitStakeholders}</td>
+                  <td>${row.cost}</td>
+                  <td class="${getImpactClass(row.costImpact)}">${row.costImpact}</td>
+                  <td class="${getTimeClass(row.costTime)}">${row.costTime}</td>
+                  <td>${row.costStakeholders}</td>
+                </tr>
+              `).join('')}
+            </table>
+            ${microcreditAssessment ? `
+            <div class="assessment-box">
+              <h4>Net Assessment:</h4>
+              <p class="chinese">${translations["Net Assessment"] || "净评估"}:</p>
+              <p>${microcreditAssessment}</p>
+            </div>` : ''}
+            
+            <h3>4. Labour Unions</h3>
+            <p class="chinese">${translations["Labour Unions (5 points)"] || "劳工联盟（5分）"}</p>
+            <table>
+              <tr>
+                <th>Benefits<br><span class="chinese">${translations["Benefits"] || "收益"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+                <th>Costs<br><span class="chinese">${translations["Costs"] || "成本"}</span></th>
+                <th>Impact<br><span class="chinese">${translations["Impact"] || "影响"}</span></th>
+                <th>Time<br><span class="chinese">${translations["Time"] || "时间"}</span></th>
+                <th>Stakeholders<br><span class="chinese">${translations["Stakeholders"] || "利益相关者"}</span></th>
+              </tr>
+              ${unionTableData.map(row => `
+                <tr>
+                  <td>${row.benefit}</td>
+                  <td class="${getImpactClass(row.benefitImpact)}">${row.benefitImpact}</td>
+                  <td class="${getTimeClass(row.benefitTime)}">${row.benefitTime}</td>
+                  <td>${row.benefitStakeholders}</td>
+                  <td>${row.cost}</td>
+                  <td class="${getImpactClass(row.costImpact)}">${row.costImpact}</td>
+                  <td class="${getTimeClass(row.costTime)}">${row.costTime}</td>
+                  <td>${row.costStakeholders}</td>
+                </tr>
+              `).join('')}
+            </table>
+            ${unionAssessment ? `
+            <div class="assessment-box">
+              <h4>Net Assessment:</h4>
+              <p class="chinese">${translations["Net Assessment"] || "净评估"}:</p>
+              <p>${unionAssessment}</p>
+            </div>` : ''}
+          </div>
+        </div>
+      </body>
+      </html>
+      `;
+
+        // Create a Blob and download the file with .doc extension for MS Word compatibility
+        const blob = new Blob([htmlContent], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${studentName.replace(/\s+/g, '_') || "Student"}_AOL2.doc`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // Show success message
+        alert("Document exported successfully!");
+        
+        // Show meme after a short delay
+        setTimeout(showMemeAfterExport, 100);
+      } catch (error) {
+        console.error("Error exporting document:", error);
+        alert("There was an error exporting your document. Please try again.");
+      }
+    }
+
+    function saveDocument() {
+      // Just show the meme with options
+      showMemeAfterExport();
+    }
+
+    // Initialize all interactive elements
+    document.addEventListener('DOMContentLoaded', function () {
+      try {
+        // Check for dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+          document.body.classList.add('dark-mode');
+        }
+
+        // Update progress bar
+        updateProgress();
+
+        // Set up motivational messages
+        updateMotivation();
+
+        // Initialize spectrum drag functionality
+        initializeSpectrumDrag();
+
+        // Set up table cells
+        setupTableCells();
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+          darkModeToggle.addEventListener('click', toggleDarkMode);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+          if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+          }
+        };
+
+        // Attach event listeners to all text inputs and textareas for live preview
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+          input.addEventListener('input', updatePreview);
+        });
+
+        // Set up collapsible sections
+        const coll = document.getElementsByClassName("collapsible");
+        for (let i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function () {
+            this.classList.toggle("active-collapsible");
+            const content = this.nextElementSibling;
+            if (!content) return;
+
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            }
+          });
+        }
+
+        // No translation display in UI
+        // Instead we'll use translations only for exports
+
+        // Initialize preview
+        updatePreview();
+
+        // Apply Chinese translations
+        // Apply dual language UI
+        applyDualLanguageUI();
+
+        // Set interval to update motivation message every 30 seconds
+        setInterval(updateMotivation, 30000);
+      } catch (error) {
+        console.error("Error initializing application:", error);
+      }
+    });
+
+    // Active translation display function
+    function applyChineseTranslations() {
+      // Direct approach - add translations to specific elements
+      const elements = document.querySelectorAll('h1, h2, h3, .info, .section-tip strong, button');
+
+      for (const el of elements) {
+        const originalText = el.textContent.trim();
+        if (translations[originalText]) {
+          // Create a translation element
+          const translationSpan = document.createElement('span');
+          translationSpan.className = 'translation-text';
+          translationSpan.textContent = translations[originalText];
+
+          // For buttons, we need special handling
+          if (el.tagName === 'BUTTON') {
+            // Store original text
+            const buttonText = el.textContent;
+            // Add translation below
+            el.innerHTML = buttonText;
+            el.appendChild(translationSpan);
+          } else {
+            // For other elements
+            el.appendChild(translationSpan);
+          }
+        }
+      }
+
+      // Add translations to table headers
+      document.querySelectorAll('th').forEach(header => {
+        const text = header.textContent.trim();
+        if (translations[text]) {
+          const translationSpan = document.createElement('span');
+          translationSpan.className = 'translation-text';
+          translationSpan.textContent = translations[text];
+          header.appendChild(translationSpan);
+        }
+      });
+    }
+    function applyDualLanguageUI() {
+      // Process headings
+      document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(heading => {
+        const text = heading.innerText.trim();
+        if (translations[text]) {
+          heading.innerHTML = `${text}<span class="chinese-text">${translations[text]}</span>`;
+        }
+      });
+
+      // Process paragraphs and instructional text
+      document.querySelectorAll('p, .info, .section-tip').forEach(paragraph => {
+        const text = paragraph.innerText.trim();
+        if (translations[text]) {
+          paragraph.innerHTML = `${text}<span class="chinese-text">${translations[text]}</span>`;
+        }
+      });
+
+      // Process form labels
+      document.querySelectorAll('label').forEach(label => {
+        const text = label.innerText.trim();
+        if (translations[text]) {
+          // Keep original HTML structure but add translation
+          let originalHTML = label.innerHTML;
+          let textNode = label.childNodes[0];
+          if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+            label.innerHTML = originalHTML.replace(text, `${text}<span class="chinese-text">${translations[text]}</span>`);
+          }
+        }
+      });
+
+      // Process buttons
+      document.querySelectorAll('button').forEach(button => {
+        // Skip buttons with complex HTML content
+        if (!button.querySelector('*')) {
+          const text = button.innerText.trim();
+          if (translations[text]) {
+            button.innerHTML = `${text}<span class="chinese-text">${translations[text]}</span>`;
+          }
+        }
+      });
+
+      // Process table headers
+      document.querySelectorAll('th').forEach(th => {
+        const text = th.innerText.trim();
+        if (translations[text]) {
+          th.innerHTML = `${text}<span class="chinese-text">${translations[text]}</span>`;
+        }
+      });
+
+      // Process various UI elements by attribute
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[key]) {
+          // Keep original content and add translation
+          element.innerHTML += `<span class="chinese-text">${translations[key]}</span>`;
+        }
+      });
+    }
+    // Add this function to your JavaScript code
+    function showMemeAfterExport() {
+      // Create a modal for the meme
+      const memeModal = document.createElement('div');
+      memeModal.id = 'memeModal'; // Add an ID for easier reference
+      memeModal.style.position = 'fixed';
+      memeModal.style.left = '0';
+      memeModal.style.top = '0';
+      memeModal.style.width = '100%';
+      memeModal.style.height = '100%';
+      memeModal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+      memeModal.style.display = 'flex';
+      memeModal.style.flexDirection = 'column';
+      memeModal.style.alignItems = 'center';
+      memeModal.style.justifyContent = 'center';
+      memeModal.style.zIndex = '10000';
+
+      // Create a container for the meme
+      const memeContainer = document.createElement('div');
+      memeContainer.style.backgroundColor = 'white';
+      memeContainer.style.padding = '20px';
+      memeContainer.style.borderRadius = '10px';
+      memeContainer.style.textAlign = 'center';
+      memeContainer.style.maxWidth = '90%';
+
+      // Add a congratulations message
+      const congrats = document.createElement('h2');
+      congrats.textContent = 'Congratulations on completing your assignment! 🎉';
+      congrats.style.color = '#4CAF50';
+
+      // Create a fun emoji-based "meme" instead of using external images
+      const memeContent = document.createElement('div');
+      memeContent.style.fontSize = '80px';
+      memeContent.style.margin = '20px 0';
+      memeContent.style.lineHeight = '1.5';
+
+      // Array of emoji "memes"
+      const memeOptions = [
+        '🥳 📝 ✅ 💯',
+        '🎊 🏆 🎓 🚀',
+        '😌 📚 ✨ 🎯'
+      ];
+
+      // Select a random meme
+      const randomMeme = memeOptions[Math.floor(Math.random() * memeOptions.length)];
+      memeContent.textContent = randomMeme;
+
+      // Add a message below the emoji meme
+      const memeMessage = document.createElement('p');
+      const messages = [
+        "You did it! Time to celebrate!",
+        "Assignment complete! Awesome job!",
+        "Look at you being all productive!"
+      ];
+      memeMessage.textContent = messages[Math.floor(Math.random() * messages.length)];
+      memeMessage.style.fontSize = '20px';
+      memeMessage.style.margin = '10px 0 20px';
+
+      // Add export button
+      const exportButton = document.createElement('button');
+      exportButton.textContent = 'Export My Document';
+      exportButton.style.marginTop = '20px';
+      exportButton.style.padding = '10px 20px';
+      exportButton.style.backgroundColor = '#4CAF50';
+      exportButton.style.color = 'white';
+      exportButton.style.border = 'none';
+      exportButton.style.borderRadius = '5px';
+      exportButton.style.cursor = 'pointer';
+      exportButton.style.marginRight = '10px';
+
+      exportButton.onclick = function () {
+        const modal = document.getElementById('memeModal');
+        if (modal) {
+          document.body.removeChild(modal);
+        }
+        actuallyExportDocument();
+      };
+
+      // Add a close button (that doesn't trigger export)
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'Close';
+      closeButton.style.marginTop = '20px';
+      closeButton.style.padding = '10px 20px';
+      closeButton.style.backgroundColor = '#888';
+      closeButton.style.color = 'white';
+      closeButton.style.border = 'none';
+      closeButton.style.borderRadius = '5px';
+      closeButton.style.cursor = 'pointer';
+
+      closeButton.onclick = function () {
+        const modal = document.getElementById('memeModal');
+        if (modal) {
+          document.body.removeChild(modal);
+        }
+      };
+
+      // Create a button container for better layout
+      const buttonContainer = document.createElement('div');
+      buttonContainer.appendChild(exportButton);
+      buttonContainer.appendChild(closeButton);
+
+      // Add all elements to the modal
+      memeContainer.appendChild(congrats);
+      memeContainer.appendChild(memeContent);
+      memeContainer.appendChild(memeMessage);
+      memeContainer.appendChild(buttonContainer);
+      memeModal.appendChild(memeContainer);
+
+      // Add the modal to the body
+      document.body.appendChild(memeModal);
+    }
+  </script>
+</body>
+
+</html>
