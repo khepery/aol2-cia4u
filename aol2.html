@@ -2936,7 +2936,7 @@
       const activePageId = activePage.id;
       let previewHTML = "";
 
-      if (activePageId === "page4") {
+      if (activePageId === "page5") {
         // Opinion Column Preview
         const intro = document.getElementById('opinionIntro')?.value || "";
         const statement1 = document.getElementById('opinionStatement1')?.value || "";
@@ -2955,7 +2955,7 @@
         <hr>
         <p><em>Current word count: ${countWords(intro + " " + statement1 + " " + statement2 + " " + statement3 + " " + statement4 + " " + conclusion)}/600</em></p>`;
       }
-      else if (activePageId === "page5") {
+      else if (activePageId === "page6") {
         // Academic Essay Preview
         const intro = document.getElementById('academicIntro')?.value || "";
         const body1 = document.getElementById('academicBody1')?.value || "";
@@ -2974,7 +2974,7 @@
         <hr>
         <p><em>Current word count: ${countWords(intro + " " + body1 + " " + body2 + " " + body3 + " " + conclusion)}/600</em></p>`;
       }
-      else if (activePageId === "page6") {
+      else if (activePageId === "page7") {
         // Cost-Benefit Analysis Preview
         const taxAssessment = document.getElementById('taxAssessment')?.value || "";
         const incomeAssessment = document.getElementById('incomeAssessment')?.value || "";
@@ -3028,6 +3028,20 @@
         previewHTML = guidePreview;
       }
       else if (activePageId === "page3") {
+        // Research & Learning Resources Preview
+        previewHTML = `<h4>Research Resources</h4>
+        <p>Study the key economic concepts and thinkers:</p>
+        <ul>
+          <li><strong>Thomas Malthus</strong> - Population growth and scarcity</li>
+          <li><strong>Thomas Piketty</strong> - Wealth inequality and redistribution</li>
+          <li><strong>Tax Systems</strong> - Progressive, regressive, and flat taxation</li>
+          <li><strong>Guaranteed Annual Income</strong> - Universal basic income policies</li>
+          <li><strong>Microcredit</strong> - Small loans for entrepreneurs</li>
+          <li><strong>Labour Unions</strong> - Collective bargaining for workers</li>
+        </ul>
+        <p><em>Take notes as you research! These will help you write stronger essays.</em></p>`;
+      }
+      else if (activePageId === "page4") {
         // Cover Page Preview
         const studentName = document.getElementById('coverStudent')?.value || "";
         const teacherName = document.getElementById('coverTeacher')?.value || "";
@@ -3040,7 +3054,7 @@
         <p><strong>Teacher:</strong> ${teacherName || "Dr. Dan Zebeljan"}</p>
         <p><strong>Date:</strong> ${date ? new Date(date).toDateString() : "<em>Select a date...</em>"}</p>`;
       }
-      else if (activePageId === "page7") {
+      else if (activePageId === "page8") {
         // Export Preview
         const studentName = document.getElementById('coverStudent')?.value || "Student Name";
 
