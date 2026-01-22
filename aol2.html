@@ -195,12 +195,16 @@
       color: var(--primary-color);
       transition: all 0.3s ease;
       pointer-events: none;
+      display: flex;
+      flex-direction: column;
     }
 
     .input-group input:focus+label,
     .input-group input:not(:placeholder-shown)+label,
     .input-group textarea:focus+label,
-    .input-group textarea:not(:placeholder-shown)+label {
+    .input-group textarea:not(:placeholder-shown)+label,
+    .input-group input[readonly]+label,
+    .input-group input[type="date"]+label {
       top: -10px;
       left: 10px;
       font-size: 12px;
@@ -933,6 +937,13 @@
       font-size: 0.85em;
       color: #666;
       margin-top: 3px;
+    }
+
+    .input-group label .chinese-text {
+      display: inline;
+      font-size: 0.9em;
+      margin-top: 0;
+      margin-left: 5px;
     }
 
     /* Resource Cards (for Research page) */
@@ -1694,23 +1705,23 @@
       <p class="info">Enter your cover page information. These details will appear on your downloaded document.</p>
       <div class="input-group">
         <input type="text" id="coverStudent" placeholder=" " />
-        <label for="coverStudent">Student's Name:</label>
+        <label for="coverStudent">Student's Name: <span class="chinese-text">学生姓名：</span></label>
       </div>
       <div class="input-group">
         <input type="text" id="coverTeacher" value="Dr. Dan Zebeljan" readonly placeholder=" " />
-        <label for="coverTeacher">Teacher's Name:</label>
+        <label for="coverTeacher">Teacher's Name: <span class="chinese-text">教师姓名：</span></label>
       </div>
       <div class="input-group">
         <input type="text" id="coverCourse" value="CIA4U-AOL2" readonly placeholder=" " />
-        <label for="coverCourse">Course Code:</label>
+        <label for="coverCourse">Course Code: <span class="chinese-text">课程代码：</span></label>
       </div>
       <div class="input-group">
         <input type="date" id="coverDate" placeholder=" " />
-        <label for="coverDate">Date:</label>
+        <label for="coverDate">Date: <span class="chinese-text">日期：</span></label>
       </div>
       <div class="input-group">
         <input type="text" id="coverTitle" placeholder=" " />
-        <label for="coverTitle">Assignment Title:</label>
+        <label for="coverTitle">Assignment Title: <span class="chinese-text">作业标题：</span></label>
       </div>
       <div class="nav-buttons">
         <button onclick="prevPage(3)">← Back to Step 2</button>
@@ -1913,7 +1924,7 @@
       <div class="input-group">
         <input type="hidden" id="spectrumPosition" value="50" />
         <input type="text" id="positionDescription" placeholder=" " />
-        <label for="positionDescription">Brief description of your position:</label>
+        <label for="positionDescription">Brief description of your position: <span class="chinese-text">简要描述你的立场：</span></label>
       </div>
 
       <div class="essay-section-container">
