@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIA4U AOL #2 Planner</title>
+  <!-- External Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Global & Animated Background */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --accent-color: #FF9800;
+      --warning-color: #f44336;
+      --background-light: #f0f9ff;
+      --text-dark: #333;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(-45deg, #f0f9ff, #e3f2fd, #f4f4f9);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Header & Dark Mode Toggle */
+    header {
+      background-color: var(--primary-color);
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 1.2em;
+      position: relative;
+    }
+
+    #darkModeToggle {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: transparent;
+      border: none;
+      font-size: 1.2em;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #eee;
+      margin-bottom: 20px;
+    }
+
+    .progress {
+      height: 100%;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    /* Step Indicator */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      padding: 20px;
+      background: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 15px;
+      position: relative;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+
+    .step.active {
+      opacity: 1;
+    }
+
+    .step.completed {
+      opacity: 1;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+      background: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .step.completed .step-number {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .step.completed .step-number::after {
+      content: '✓';
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: #fff;
+      color: var(--primary-color);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-label {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      max-width: 80px;
+    }
+
+    .step.active .step-label {
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+
+    .step-connector {
+      width: 40px;
+      height: 3px;
+      background: #e0e0e0;
+      margin: 0 -5px;
+      margin-bottom: 25px;
+    }
+
+    .step-connector.active {
+      background: var(--primary-color);
+    }
+
+    /* Main Container */
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Section styles */
+    h2 {
+      color: #2e7d32;
+      margin-top: 0;
+    }
+
+    .section {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+      color: #555;
+      font-size: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      background-color: #333;
+      color: #fff;
+    }
+
+    .motivation {
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #ffd700;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button.secondary {
+      background-color: var(--secondary-color);
+    }
+
+    button.secondary:hover {
+      background-color: #1976D2;
+    }
+
+    button.warning {
+      background-color: var(--accent-color);
+    }
+
+    button.warning:hover {
+      background-color: #f57c00;
+    }
+
+    /* Workflow Card Styles */
+    .workflow-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .workflow-card {
+      background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 5px solid var(--primary-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .workflow-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .workflow-card.step-1 { border-left-color: #4CAF50; }
+    .workflow-card.step-2 { border-left-color: #2196F3; }
+    .workflow-card.step-3 { border-left-color: #9C27B0; }
+    .workflow-card.step-4 { border-left-color: #FF9800; }
+    .workflow-card.step-5 { border-left-color: #f44336; }
+
+    .workflow-number {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .workflow-card.step-1 .workflow-number { background: #4CAF50; }
+    .workflow-card.step-2 .workflow-number { background: #2196F3; }
+    .workflow-card.step-3 .workflow-number { background: #9C27B0; }
+    .workflow-card.step-4 .workflow-number { background: #FF9800; }
+    .workflow-card.step-5 .workflow-number { background: #f44336; }
+
+    .workflow-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+      padding-left: 20px;
+    }
+
+    .workflow-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .workflow-time {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* Important Notice Box */
+    .notice-box {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      border: 2px solid #ff9800;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .notice-box.info {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-color: #2196F3;
+    }
+
+    .notice-box.success {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border-color: #4CAF50;
+    }
+
+    .notice-box.warning {
+      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+      border-color: #f44336;
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .notice-title i {
+      font-size: 24px;
+    }
+
+    /* Locked Section Overlay */
+    .locked-section {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .locked-section::after {
+      content: '🔒 Complete previous steps first';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      z-index: 100;
+    }
+
+    .unlocked-section {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    /* Input Groups */
+    .input-group {
+      position: relative;
+      margin: 15px 0;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      padding: 12px;
+      border: 2px solid var(--primary-color);
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);
+    }
+
+    .input-group label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: white;
+      padding: 0 5px;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .input-group input:focus+label,
+    .input-group input:not(:placeholder-shown)+label,
+    .input-group textarea:focus+label,
+    .input-group textarea:not(:placeholder-shown)+label {
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      color: #2e7d32;
+    }
+
+    /* Page Display */
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    /* Essay Section Containers */
+    .essay-section-container {
+      margin-bottom: 25px;
+    }
+
+    .section-tip {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .essay-box {
+      border: 2px dashed var(--primary-color);
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #e8f5e9;
+      margin-top: 5px;
+    }
+
+    .essay-input-group {
+      margin-bottom: 15px;
+    }
+
+    .essay-input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .essay-input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+    }
+
+    /* Live Preview Pane */
+    .preview-pane {
+      position: fixed;
+      right: 20px;
+      top: 100px;
+      width: 300px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-height: 80vh;
+      overflow-y: auto;
+      resize: both;
+      display: none;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .preview-header h3 {
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    /* Enhanced Table Editor */
+    .table-editor {
+      margin-top: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #fafafa;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    .add-row-btn {
+      margin-top: 10px;
+      background-color: var(--secondary-color);
+    }
+
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: help;
+    }
+
+    .tooltip i {
+      color: var(--primary-color);
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 14px;
+      line-height: 1.4;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Enhanced Spectrum Slider */
+    .spectrum-container {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .spectrum-title {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .spectrum-wrapper {
+      position: relative;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+
+    .spectrum {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      height: 60px;
+      margin: 30px 0;
+    }
+
+    .spectrum-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(to right, #d32f2f, #E6B333, var(--primary-color));
+      transform: translateY(-50%);
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .spectrum-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .spectrum-label {
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .spectrum-label i {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .spectrum-marker {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: #3f51b5;
+      border-radius: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      border: 3px solid white;
+      transition: background-color 0.3s;
+    }
+
+    .spectrum-marker:hover {
+      background-color: #303f9f;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* Enhanced Radio Button Style */
+    .radio-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      padding-left: 25px;
+      margin-right: 15px;
+      font-size: 14px;
+    }
+
+    .radio-label input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      background-color: #eee;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+    }
+
+    .radio-label:hover input~.checkmark {
+      background-color: #ccc;
+    }
+
+    .radio-label input:checked~.checkmark {
+      background-color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    .radio-label input:checked~.checkmark:after {
+      display: block;
+    }
+
+    .radio-label .checkmark:after {
+      top: 5px;
+      left: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    /* Disabled/Locked Radio Buttons */
+    .radio-container.locked {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .radio-container.locked .radio-label {
+      cursor: not-allowed;
+    }
+
+    /* Cost-Benefit Impact Levels */
+    .impact-high { background-color: #ffe0e0; font-weight: bold; }
+    .impact-medium { background-color: #fff0e0; }
+    .impact-low { background-color: #f0f0f0; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-modal:hover { color: black; }
+
+    /* Resource Cards */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .resource-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .resource-card h4 {
+      margin-top: 0;
+      color: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .resource-card p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .resource-link {
+      display: inline-block;
+      background: var(--secondary-color);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .resource-link:hover {
+      background: #1976D2;
+      transform: translateX(5px);
+    }
+
+    /* Current Step Highlight */
+    .current-step-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Chinese Text */
+    .chinese-text {
+      display: block;
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background: #2d2d2d;
+      color: #fff;
+    }
+
+    .dark-mode .section {
+      background: #424242;
+      color: #fff;
+    }
+
+    .dark-mode input,
+    .dark-mode textarea {
+      border-color: #888;
+      background: #333;
+      color: #fff;
+    }
+
+    .dark-mode .input-group label {
+      background: #424242;
+      color: #aaa;
+    }
+
+    .dark-mode .preview-pane {
+      background: #424242;
+      color: #fff;
+    }
+
+    .dark-mode .essay-box {
+      background-color: #424242;
+      border-color: var(--primary-color);
+    }
+
+    .dark-mode th { background-color: #388e3c; }
+    .dark-mode td { border-color: #555; background-color: #333; }
+    .dark-mode tr:nth-child(even) td { background-color: #3a3a3a; }
+    .dark-mode .table-editor { background-color: #333; border-color: #555; }
+    .dark-mode .modal-content { background-color: #333; color: #fff; border-color: #555; }
+    .dark-mode .step-indicator { background: #424242; }
+    .dark-mode .step-label { color: #aaa; }
+    .dark-mode .step-number { background: #555; color: #aaa; }
+    .dark-mode .workflow-card { background: linear-gradient(135deg, #424242 0%, #333 100%); }
+    .dark-mode .workflow-title { color: #fff; }
+    .dark-mode .workflow-description { color: #ccc; }
+    .dark-mode .notice-box { background: #424242; }
+    .dark-mode .resource-card { background: #424242; }
+    .dark-mode .resource-card p { color: #ccc; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main { padding: 10px; }
+      .step-indicator { gap: 5px; padding: 10px; }
+      .step { padding: 5px 8px; }
+      .step-number { width: 30px; height: 30px; font-size: 14px; }
+      .step-label { font-size: 10px; max-width: 60px; }
+      .step-connector { width: 20px; }
+      .workflow-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <header ondblclick="triggerRainbow()">
+    <h1>🎓 AOL #2 Planner - CIA4U</h1>
+    <button id="darkModeToggle">🌓</button>
+    <p>Your Self-Guided Journey Through Economic Inequality Analysis</p>
+    <span class="chinese-text">您的经济不平等分析自主学习之旅</span>
+  </header>
+
+  <!-- Step Indicator -->
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step active" data-step="1">
+      <div class="step-number">1</div>
+      <div class="step-label">Start & Initial Opinions</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" data-step="2">
+      <div class="step-number">2</div>
+      <div class="step-label">Research & Learn</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" data-step="3">
+      <div class="step-number">3</div>
+      <div class="step-label">Write Answers</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" data-step="4">
+      <div class="step-number">4</div>
+      <div class="step-label">Final Opinions</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" data-step="5">
+      <div class="step-number">5</div>
+      <div class="step-label">Review & Export</div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress"></div>
+  </div>
+
+  <!-- Modals -->
+  <div id="taxModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('taxModal')">&times;</span>
+      <h3>Net Assessment: Changing the Tax System</h3>
+      <p>A comprehensive analysis of the costs and benefits suggests that changes to the tax system can have significant economic and social impacts.</p>
+      <textarea id="taxAssessment" rows="5" style="width: 100%; margin-top: 10px;" placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <div id="incomeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('incomeModal')">&times;</span>
+      <h3>Net Assessment: Guaranteed Annual Income</h3>
+      <p>Guaranteed annual income programs present a complex balance of social benefits against economic costs.</p>
+      <textarea id="incomeAssessment" rows="5" style="width: 100%; margin-top: 10px;" placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <div id="microcreditModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('microcreditModal')">&times;</span>
+      <h3>Net Assessment: Microcredit</h3>
+      <p>Microcredit provides important financial access for underserved communities, but its overall impact depends heavily on implementation.</p>
+      <textarea id="microcreditAssessment" rows="5" style="width: 100%; margin-top: 10px;" placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <div id="unionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('unionModal')">&times;</span>
+      <h3>Net Assessment: Labour Unions</h3>
+      <p>Labour unions play a complex role in modern economies, providing worker protections while potentially creating market rigidities.</p>
+      <textarea id="unionAssessment" rows="5" style="width: 100%; margin-top: 10px;" placeholder="Write your own net assessment here..."></textarea>
+    </div>
+  </div>
+
+  <main>
+    <!-- Live Preview Pane -->
+    <div class="preview-pane" id="previewPane">
+      <div class="preview-header">
+        <h3>Live Preview ✨</h3>
+        <button id="previewToggle" onclick="togglePreview()">Close</button>
+      </div>
+      <div class="preview-content">Your content will appear here...</div>
+    </div>
+
+    <!-- ==================== PAGE 1: WELCOME & WORKFLOW ==================== -->
+    <div id="page1" class="section page active">
+      <span class="current-step-badge">📍 STEP 1: Getting Started</span>
+      <h2>Welcome to AOL #2: Economic Inequality Analysis</h2>
+      <span class="chinese-text">欢迎来到AOL #2：经济不平等分析</span>
+
+      <div class="notice-box info">
+        <div class="notice-title">
+          <i class="fas fa-info-circle"></i>
+          Important: This is a Self-Guided Assignment
+        </div>
+        <p>You will complete this assignment independently, following the steps below. <strong>Read this page carefully</strong> to understand what you need to do at each stage.</p>
+        <p><span class="chinese-text">您将独立完成此作业，按照以下步骤进行。请仔细阅读本页以了解每个阶段需要做什么。</span></p>
+      </div>
+
+      <h3>📋 Your 5-Step Journey</h3>
+      <span class="chinese-text">您的5步旅程</span>
+
+      <div class="workflow-container">
+        <div class="workflow-card step-1">
+          <div class="workflow-number">1</div>
+          <div class="workflow-title">Initial Opinions</div>
+          <div class="workflow-description">
+            Answer the Anticipation Guide questions based on your <strong>current gut feelings</strong>. Don't research yet - just share what you believe right now.
+            <span class="chinese-text">根据您目前的直觉回答预期指南问题。先不要研究——只需分享您现在的看法。</span>
+          </div>
+          <span class="workflow-time">⏱️ ~10 minutes</span>
+        </div>
+
+        <div class="workflow-card step-2">
+          <div class="workflow-number">2</div>
+          <div class="workflow-title">Research & Learn</div>
+          <div class="workflow-description">
+            Study the provided resources about Malthus, Piketty, tax systems, guaranteed income, microcredit, and labour unions.
+            <span class="chinese-text">学习关于马尔萨斯、皮凯蒂、税收制度、保障性年收入、小额信贷和劳工联盟的资源。</span>
+          </div>
+          <span class="workflow-time">⏱️ 2-3 hours</span>
+        </div>
+
+        <div class="workflow-card step-3">
+          <div class="workflow-number">3</div>
+          <div class="workflow-title">Write Your Answers</div>
+          <div class="workflow-description">
+            Complete the three parts of the assignment: Opinion Column (600 words), Academic Essay (600 words), and Cost-Benefit Analysis.
+            <span class="chinese-text">完成作业的三个部分：观点专栏（600字）、学术论文（600字）和成本效益分析。</span>
+          </div>
+          <span class="workflow-time">⏱️ 3-4 hours</span>
+        </div>
+
+        <div class="workflow-card step-4">
+          <div class="workflow-number">4</div>
+          <div class="workflow-title">Final Opinions</div>
+          <div class="workflow-description">
+            Return to the Anticipation Guide and answer again with your <strong>new informed perspective</strong>. Compare how your views changed.
+            <span class="chinese-text">返回预期指南，用您的新知识再次回答。比较您的观点如何改变。</span>
+          </div>
+          <span class="workflow-time">⏱️ ~15 minutes</span>
+        </div>
+
+        <div class="workflow-card step-5">
+          <div class="workflow-number">5</div>
+          <div class="workflow-title">Review & Export</div>
+          <div class="workflow-description">
+            Check your work against the rubric, make final edits, and export your completed assignment for submission.
+            <span class="chinese-text">根据评分标准检查您的作业，进行最终编辑，然后导出完成的作业以提交。</span>
+          </div>
+          <span class="workflow-time">⏱️ ~20 minutes</span>
+        </div>
+      </div>
+
+      <div class="notice-box warning">
+        <div class="notice-title">
+          <i class="fas fa-exclamation-triangle"></i>
+          Assignment Requirements
+        </div>
+        <ul>
+          <li><strong>Due:</strong> End of Unit 2 | <strong>Worth:</strong> 15% of your final grade</li>
+          <li><strong>Format:</strong> Double-spaced, proofread, with your name, teacher's name, date, and word count</li>
+          <li><strong>Plagiarism:</strong> Will trigger ZERO TOLERANCE academic dishonesty policy!</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(2)" style="font-size: 18px; padding: 15px 30px;">
+          <i class="fas fa-arrow-right"></i> Begin Step 1: Initial Opinions
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 2: ANTICIPATION GUIDE - INITIAL ==================== -->
+    <div id="page2" class="section page">
+      <span class="current-step-badge">📍 STEP 1: Initial Opinions</span>
+      <h2>Anticipation Guide - Your Initial Opinions</h2>
+      <span class="chinese-text">预期指南 - 您的初始观点</span>
+
+      <div class="notice-box success">
+        <div class="notice-title">
+          <i class="fas fa-lightbulb"></i>
+          Instructions: Answer Based on Your GUT FEELING
+        </div>
+        <p>Read each statement and decide if you <strong>Agree</strong> or <strong>Disagree</strong> based on what you currently believe. <strong>Do NOT research these topics yet</strong> - we want your honest first impressions!</p>
+        <p><span class="chinese-text">阅读每个陈述，根据您目前的信念决定是否同意或不同意。现在不要研究这些话题——我们需要您诚实的第一印象！</span></p>
+      </div>
+
+      <div class="table-container">
+        <table id="anticipationTable">
+          <tr>
+            <th width="5%">#</th>
+            <th width="55%">Statement 陈述</th>
+            <th width="20%">Initial Opinion 初始观点</th>
+            <th width="20%">Final Opinion 最终观点<br><small style="font-weight:normal;">(Complete in Step 4)</small></th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Homelessness is a problem because people do not want to work and the causes are too complicated to fix.<br><span class="chinese-text">无家可归是一个问题，因为人们不想工作，原因太复杂无法解决。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial1" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial1" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final1-container">
+                <label class="radio-label"><input type="radio" name="final1" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final1" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Over 30,000 Canadians are homeless every day.<br><span class="chinese-text">每天有超过30,000名加拿大人无家可归。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial2" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial2" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final2-container">
+                <label class="radio-label"><input type="radio" name="final2" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final2" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>The cost of homelessness for Canada is minor.<br><span class="chinese-text">加拿大的无家可归问题成本很小。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial3" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial3" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final3-container">
+                <label class="radio-label"><input type="radio" name="final3" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final3" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Welfare is an effective way of helping the poor.<br><span class="chinese-text">福利是帮助穷人的有效方式。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial4" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial4" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final4-container">
+                <label class="radio-label"><input type="radio" name="final4" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final4" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Economists do not agree on how to help the poor.<br><span class="chinese-text">经济学家们对如何帮助穷人没有达成共识。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial5" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial5" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final5-container">
+                <label class="radio-label"><input type="radio" name="final5" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final5" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>If the rich pay higher taxes, then there will be fewer jobs.<br><span class="chinese-text">如果富人缴纳更高的税，就会有更少的工作岗位。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial6" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial6" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final6-container">
+                <label class="radio-label"><input type="radio" name="final6" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final6" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>It is better for the economy if society does nothing for the poor.<br><span class="chinese-text">如果社会不帮助穷人，对经济会更好。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial7" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial7" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final7-container">
+                <label class="radio-label"><input type="radio" name="final7" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final7" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>The poor will always be poor and there is nothing that governments can do about it.<br><span class="chinese-text">穷人永远是穷人，政府对此无能为力。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial8" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial8" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final8-container">
+                <label class="radio-label"><input type="radio" name="final8" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final8" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Labour unions no longer help improve the lives of working Canadians.<br><span class="chinese-text">工会不再帮助改善加拿大工人的生活。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial9" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial9" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final9-container">
+                <label class="radio-label"><input type="radio" name="final9" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final9" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>The rich are getting richer and the poor are getting poorer.<br><span class="chinese-text">富人越来越富，穷人越来越穷。</span></td>
+            <td>
+              <div class="radio-container">
+                <label class="radio-label"><input type="radio" name="initial10" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="initial10" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+            <td>
+              <div class="radio-container locked" id="final10-container">
+                <label class="radio-label"><input type="radio" name="final10" value="agree" disabled><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final10" value="disagree" disabled><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="notice-box">
+        <div class="notice-title"><i class="fas fa-lock"></i> Why is "Final Opinion" locked?</div>
+        <p>The Final Opinion column will unlock after you complete Step 3 (writing your answers). This ensures you have time to research and form informed opinions before comparing your views.</p>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(1)">← Back to Overview</button>
+        <button onclick="goToPage(3)" class="secondary">Next: Research & Learn →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 3: RESEARCH & LEARN ==================== -->
+    <div id="page3" class="section page">
+      <span class="current-step-badge">📍 STEP 2: Research & Learn</span>
+      <h2>Research & Learning Resources</h2>
+      <span class="chinese-text">研究与学习资源</span>
+
+      <div class="notice-box info">
+        <div class="notice-title"><i class="fas fa-book-reader"></i> Your Research Mission</div>
+        <p>Before writing your essays, you need to understand key economic concepts and thinkers. Study the resources below carefully. Take notes on important ideas!</p>
+        <p><span class="chinese-text">在撰写论文之前，您需要了解关键的经济概念和思想家。仔细学习以下资源。记下重要的想法！</span></p>
+      </div>
+
+      <h3>🎯 Key Concepts to Research</h3>
+
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h4><i class="fas fa-user-tie"></i> Thomas Malthus</h4>
+          <p>18th-century economist who believed population growth would outpace food production, leading to inevitable poverty. His pessimistic view suggests scarcity limits economic progress.</p>
+          <span class="chinese-text">18世纪经济学家，认为人口增长会超过食物生产，导致不可避免的贫困。</span>
+          <br><br>
+          <a href="https://www.britannica.com/biography/Thomas-Malthus" target="_blank" class="resource-link">Learn About Malthus →</a>
+        </div>
+
+        <div class="resource-card">
+          <h4><i class="fas fa-user-graduate"></i> Thomas Piketty</h4>
+          <p>Modern economist who argues wealth inequality naturally grows in capitalist economies. He advocates for progressive taxation and wealth redistribution policies.</p>
+          <span class="chinese-text">现代经济学家，认为资本主义经济中财富不平等会自然增长。他主张累进税和财富再分配政策。</span>
+          <br><br>
+          <a href="https://www.britannica.com/biography/Thomas-Piketty" target="_blank" class="resource-link">Learn About Piketty →</a>
+        </div>
+
+        <div class="resource-card">
+          <h4><i class="fas fa-hand-holding-usd"></i> Guaranteed Annual Income</h4>
+          <p>A policy where government provides all citizens with a minimum income regardless of employment. Also known as Universal Basic Income (UBI).</p>
+          <span class="chinese-text">政府向所有公民提供最低收入的政策，无论其就业状况如何。也称为通用基本收入（UBI）。</span>
+          <br><br>
+          <a href="https://www.investopedia.com/terms/b/basic-income.asp" target="_blank" class="resource-link">Learn About UBI →</a>
+        </div>
+
+        <div class="resource-card">
+          <h4><i class="fas fa-coins"></i> Microcredit</h4>
+          <p>Small loans provided to low-income individuals to help them start businesses. Pioneered by Muhammad Yunus and the Grameen Bank.</p>
+          <span class="chinese-text">向低收入个人提供的小额贷款，帮助他们创业。由穆罕默德·尤努斯和格莱珉银行开创。</span>
+          <br><br>
+          <a href="https://www.investopedia.com/terms/m/microcredit.asp" target="_blank" class="resource-link">Learn About Microcredit →</a>
+        </div>
+
+        <div class="resource-card">
+          <h4><i class="fas fa-users"></i> Labour Unions</h4>
+          <p>Organizations that represent workers in negotiations with employers. They advocate for better wages, benefits, and working conditions.</p>
+          <span class="chinese-text">代表工人与雇主谈判的组织。他们倡导更好的工资、福利和工作条件。</span>
+          <br><br>
+          <a href="https://www.investopedia.com/terms/l/labor-union.asp" target="_blank" class="resource-link">Learn About Unions →</a>
+        </div>
+
+        <div class="resource-card">
+          <h4><i class="fas fa-balance-scale"></i> Tax System Changes</h4>
+          <p>Different approaches to taxation including progressive taxes, flat taxes, wealth taxes, and their effects on inequality and economic growth.</p>
+          <span class="chinese-text">不同的税收方法，包括累进税、固定税、财富税，以及它们对不平等和经济增长的影响。</span>
+          <br><br>
+          <a href="https://www.investopedia.com/terms/p/progressivetax.asp" target="_blank" class="resource-link">Learn About Taxation →</a>
+        </div>
+      </div>
+
+      <div class="notice-box success">
+        <div class="notice-title"><i class="fas fa-clipboard-check"></i> Research Checklist</div>
+        <p>Before moving on, make sure you can answer these questions:</p>
+        <ul>
+          <li>✓ What is Malthus's view on poverty and resources?</li>
+          <li>✓ What is Piketty's view on wealth inequality?</li>
+          <li>✓ What are the pros and cons of progressive taxation?</li>
+          <li>✓ How does guaranteed annual income work?</li>
+          <li>✓ What is microcredit and who does it help?</li>
+          <li>✓ What role do labour unions play in the economy?</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(2)">← Back to Initial Opinions</button>
+        <button onclick="goToPage(4)" class="secondary">Next: Cover Page Details →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 4: COVER PAGE DETAILS ==================== -->
+    <div id="page4" class="section page">
+      <span class="current-step-badge">📍 STEP 3: Writing Your Answers</span>
+      <h2>Cover Page Details</h2>
+      <span class="chinese-text">封面页详情</span>
+
+      <p class="info">Enter your cover page information. These details will appear on your exported document.</p>
+
+      <div class="input-group">
+        <input type="text" id="coverStudent" placeholder=" " />
+        <label for="coverStudent">Student's Name 学生姓名:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverTeacher" value="Dr. Dan Zebeljan" readonly placeholder=" " />
+        <label for="coverTeacher">Teacher's Name 老师姓名:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverCourse" value="CIA4U-AOL2" readonly placeholder=" " />
+        <label for="coverCourse">Course Code 课程代码:</label>
+      </div>
+      <div class="input-group">
+        <input type="date" id="coverDate" placeholder=" " />
+        <label for="coverDate">Date 日期:</label>
+      </div>
+      <div class="input-group">
+        <input type="text" id="coverTitle" placeholder=" " />
+        <label for="coverTitle">Assignment Title 作业标题:</label>
+      </div>
+
+      <div class="notice-box">
+        <div class="notice-title"><i class="fas fa-star"></i> Title Tip</div>
+        <p>Choose an <strong>insightful, telling title</strong> that demonstrates something unique about your analysis. Avoid generic titles like "Economics Essay".</p>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(3)">← Back to Research</button>
+        <button onclick="goToPage(5)" class="secondary">Next: Part I - Opinion Column →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 5: PART I - OPINION COLUMN ==================== -->
+    <div id="page5" class="section page">
+      <span class="current-step-badge">📍 STEP 3: Writing Your Answers</span>
+      <h2>Part I: Opinion Column (600 words)</h2>
+      <span class="chinese-text">第一部分：观点专栏（600字）</span>
+
+      <div class="notice-box info">
+        <div class="notice-title"><i class="fas fa-pen-fancy"></i> What to Write</div>
+        <p>Analyze how your opinions from the Anticipation Guide have changed (or haven't changed) based on your research. Select 3-4 statements to discuss in depth.</p>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Introduction (100-150 words):</strong> Hook + Context + Thesis</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionIntro">Introduction:</label>
+            <textarea id="opinionIntro" rows="5" placeholder="Start with an engaging hook (surprising statistic, provocative question, or relevant quote). Provide context about your initial economic perspective. Clearly state your thesis about how your thinking has evolved."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Statement Analysis (300-350 words):</strong> Analyze 3-4 key statements</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionStatement1">Statement 1 Analysis:</label>
+            <textarea id="opinionStatement1" rows="5" placeholder="Which statement from the Anticipation Guide are you analyzing? What was your initial opinion? What is your opinion now? What evidence changed your mind (or reinforced your view)?"></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="opinionStatement2">Statement 2 Analysis:</label>
+            <textarea id="opinionStatement2" rows="5" placeholder="Continue with another statement..."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="opinionStatement3">Statement 3 Analysis:</label>
+            <textarea id="opinionStatement3" rows="5" placeholder="Continue with another statement..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Conclusion (100-150 words):</strong> Summarize your evolved thinking</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="opinionConclusion">Conclusion:</label>
+            <textarea id="opinionConclusion" rows="5" placeholder="Restate your thesis. Summarize the key changes in your thinking. Reflect on what you learned about economic inequality."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(4)">← Back</button>
+        <button onclick="goToPage(6)" class="secondary">Next: Part II - Academic Essay →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 6: PART II - ACADEMIC ESSAY ==================== -->
+    <div id="page6" class="section page">
+      <span class="current-step-badge">📍 STEP 3: Writing Your Answers</span>
+      <h2>Part II: Academic Essay (600 words)</h2>
+      <span class="chinese-text">第二部分：学术论文（600字）</span>
+
+      <div class="notice-box info">
+        <div class="notice-title"><i class="fas fa-balance-scale"></i> The Malthus-Piketty Spectrum</div>
+        <p>Where do you stand between Malthus (resource scarcity limits progress) and Piketty (wealth redistribution can reduce inequality)? Justify your position with evidence.</p>
+      </div>
+
+      <!-- Spectrum Slider -->
+      <div class="spectrum-container">
+        <div class="spectrum-title">Your Position on the Economic Spectrum</div>
+        <div class="spectrum-wrapper">
+          <div class="spectrum">
+            <div class="spectrum-line"></div>
+            <div class="spectrum-marker" id="spectrumMarker" style="left: 50%;"></div>
+          </div>
+          <div class="spectrum-labels">
+            <div class="spectrum-label">
+              <i class="fas fa-exclamation-triangle" style="color: #d32f2f;"></i>
+              <strong>Malthus</strong><br>
+              <small>Resource scarcity</small>
+            </div>
+            <div class="spectrum-label">
+              <i class="fas fa-balance-scale" style="color: #E6B333;"></i>
+              <strong>Middle Ground</strong><br>
+              <small>Balanced view</small>
+            </div>
+            <div class="spectrum-label">
+              <i class="fas fa-hand-holding-heart" style="color: var(--primary-color);"></i>
+              <strong>Piketty</strong><br>
+              <small>Wealth redistribution</small>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="spectrumPosition" value="50">
+        <div class="input-group" style="margin-top: 20px;">
+          <textarea id="spectrumDescription" rows="3" placeholder="Briefly describe why you placed yourself at this position on the spectrum..."></textarea>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Introduction (100 words):</strong> Present your position clearly</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicIntro">Introduction:</label>
+            <textarea id="academicIntro" rows="5" placeholder="Hook your reader. Introduce the Malthus-Piketty debate. State your thesis - where do you stand and why?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Body Paragraphs (400 words):</strong> Support your position with evidence</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicBody1">Body Paragraph 1:</label>
+            <textarea id="academicBody1" rows="5" placeholder="Present your first argument with supporting evidence from your research..."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="academicBody2">Body Paragraph 2:</label>
+            <textarea id="academicBody2" rows="5" placeholder="Present your second argument with supporting evidence..."></textarea>
+          </div>
+          <div class="essay-input-group">
+            <label for="academicBody3">Body Paragraph 3:</label>
+            <textarea id="academicBody3" rows="5" placeholder="Address counterarguments or present additional evidence..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-section-container">
+        <p class="section-tip"><strong>Conclusion (100 words):</strong> Synthesize and discuss implications</p>
+        <div class="essay-box">
+          <div class="essay-input-group">
+            <label for="academicConclusion">Conclusion:</label>
+            <textarea id="academicConclusion" rows="5" placeholder="Restate your thesis. Summarize key arguments. Discuss broader implications for understanding economic inequality."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(5)">← Back</button>
+        <button onclick="goToPage(7)" class="secondary">Next: Part III - Cost-Benefit Analysis →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 7: PART III - COST-BENEFIT ANALYSIS ==================== -->
+    <div id="page7" class="section page">
+      <span class="current-step-badge">📍 STEP 3: Writing Your Answers</span>
+      <h2>Part III: Cost-Benefit Analysis</h2>
+      <span class="chinese-text">第三部分：成本效益分析</span>
+
+      <div class="notice-box info">
+        <div class="notice-title"><i class="fas fa-table"></i> Instructions</div>
+        <p>For each economic concept, identify costs and benefits. Include Impact Level (High/Medium/Low), Timeframe (ST/MT/LT), and affected Stakeholders.</p>
+      </div>
+
+      <!-- Tax System Table -->
+      <div class="table-editor">
+        <h3>1. Changing the Tax System (5 points)</h3>
+        <div class="table-container">
+          <table id="taxTable">
+            <tr>
+              <th>Benefits</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+              <th>Costs</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Progressive taxation reduces wealth inequality</td>
+              <td contenteditable="true">High</td>
+              <td contenteditable="true">LT</td>
+              <td contenteditable="true">Lower/middle income</td>
+              <td contenteditable="true">Higher administrative costs</td>
+              <td contenteditable="true">Medium</td>
+              <td contenteditable="true">ST</td>
+              <td contenteditable="true">Government</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('taxTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('taxModal')" style="margin-left: 10px;">Write Net Assessment</button>
+      </div>
+
+      <!-- Guaranteed Annual Income Table -->
+      <div class="table-editor">
+        <h3>2. Guaranteed Annual Income (5 points)</h3>
+        <div class="table-container">
+          <table id="incomeTable">
+            <tr>
+              <th>Benefits</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+              <th>Costs</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Reduces poverty and provides economic security</td>
+              <td contenteditable="true">High</td>
+              <td contenteditable="true">MT</td>
+              <td contenteditable="true">Low-income households</td>
+              <td contenteditable="true">Significant government expense</td>
+              <td contenteditable="true">High</td>
+              <td contenteditable="true">ST</td>
+              <td contenteditable="true">Taxpayers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('incomeTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('incomeModal')" style="margin-left: 10px;">Write Net Assessment</button>
+      </div>
+
+      <!-- Microcredit Table -->
+      <div class="table-editor">
+        <h3>3. Microcredit (5 points)</h3>
+        <div class="table-container">
+          <table id="microcreditTable">
+            <tr>
+              <th>Benefits</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+              <th>Costs</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Provides financial access to underserved communities</td>
+              <td contenteditable="true">High</td>
+              <td contenteditable="true">MT</td>
+              <td contenteditable="true">Low-income entrepreneurs</td>
+              <td contenteditable="true">Higher interest rates than traditional loans</td>
+              <td contenteditable="true">Medium</td>
+              <td contenteditable="true">ST</td>
+              <td contenteditable="true">Borrowers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('microcreditTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('microcreditModal')" style="margin-left: 10px;">Write Net Assessment</button>
+      </div>
+
+      <!-- Labour Unions Table -->
+      <div class="table-editor">
+        <h3>4. Labour Unions (5 points)</h3>
+        <div class="table-container">
+          <table id="unionTable">
+            <tr>
+              <th>Benefits</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+              <th>Costs</th>
+              <th>Impact</th>
+              <th>Time</th>
+              <th>Stakeholders</th>
+            </tr>
+            <tr>
+              <td contenteditable="true">Better wages and working conditions for members</td>
+              <td contenteditable="true">High</td>
+              <td contenteditable="true">MT</td>
+              <td contenteditable="true">Union members</td>
+              <td contenteditable="true">Higher labor costs for businesses</td>
+              <td contenteditable="true">Medium</td>
+              <td contenteditable="true">ST</td>
+              <td contenteditable="true">Employers</td>
+            </tr>
+            <tr>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+              <td contenteditable="true"></td>
+            </tr>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addRow('unionTable')">+ Add Row</button>
+        <button class="secondary" onclick="openModal('unionModal')" style="margin-left: 10px;">Write Net Assessment</button>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(6)">← Back</button>
+        <button onclick="unlockFinalOpinions(); goToPage(8);" class="warning" style="font-size: 16px;">
+          <i class="fas fa-unlock"></i> Unlock Final Opinions & Continue →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 8: FINAL OPINIONS ==================== -->
+    <div id="page8" class="section page">
+      <span class="current-step-badge">📍 STEP 4: Final Opinions</span>
+      <h2>Anticipation Guide - Your Final Opinions</h2>
+      <span class="chinese-text">预期指南 - 您的最终观点</span>
+
+      <div class="notice-box success">
+        <div class="notice-title"><i class="fas fa-check-circle"></i> Time to Compare!</div>
+        <p>Now that you've completed your research and written your essays, return to the Anticipation Guide and answer with your <strong>new informed perspective</strong>. Notice how your views have changed!</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <tr>
+            <th>#</th>
+            <th>Statement</th>
+            <th>Your Initial Opinion</th>
+            <th>Your Final Opinion (Answer Now!)</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Homelessness is a problem because people do not want to work...</td>
+            <td id="initial1-display">-</td>
+            <td>
+              <div class="radio-container" id="final1-active">
+                <label class="radio-label"><input type="radio" name="final1" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final1" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Over 30,000 Canadians are homeless every day.</td>
+            <td id="initial2-display">-</td>
+            <td>
+              <div class="radio-container" id="final2-active">
+                <label class="radio-label"><input type="radio" name="final2" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final2" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>The cost of homelessness for Canada is minor.</td>
+            <td id="initial3-display">-</td>
+            <td>
+              <div class="radio-container" id="final3-active">
+                <label class="radio-label"><input type="radio" name="final3" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final3" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Welfare is an effective way of helping the poor.</td>
+            <td id="initial4-display">-</td>
+            <td>
+              <div class="radio-container" id="final4-active">
+                <label class="radio-label"><input type="radio" name="final4" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final4" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Economists do not agree on how to help the poor.</td>
+            <td id="initial5-display">-</td>
+            <td>
+              <div class="radio-container" id="final5-active">
+                <label class="radio-label"><input type="radio" name="final5" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final5" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>If the rich pay higher taxes, then there will be fewer jobs.</td>
+            <td id="initial6-display">-</td>
+            <td>
+              <div class="radio-container" id="final6-active">
+                <label class="radio-label"><input type="radio" name="final6" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final6" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>It is better for the economy if society does nothing for the poor.</td>
+            <td id="initial7-display">-</td>
+            <td>
+              <div class="radio-container" id="final7-active">
+                <label class="radio-label"><input type="radio" name="final7" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final7" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>The poor will always be poor and there is nothing that governments can do about it.</td>
+            <td id="initial8-display">-</td>
+            <td>
+              <div class="radio-container" id="final8-active">
+                <label class="radio-label"><input type="radio" name="final8" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final8" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Labour unions no longer help improve the lives of working Canadians.</td>
+            <td id="initial9-display">-</td>
+            <td>
+              <div class="radio-container" id="final9-active">
+                <label class="radio-label"><input type="radio" name="final9" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final9" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>The rich are getting richer and the poor are getting poorer.</td>
+            <td id="initial10-display">-</td>
+            <td>
+              <div class="radio-container" id="final10-active">
+                <label class="radio-label"><input type="radio" name="final10" value="agree"><span class="checkmark"></span>Agree</label>
+                <label class="radio-label"><input type="radio" name="final10" value="disagree"><span class="checkmark"></span>Disagree</label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(7)">← Back to Cost-Benefit</button>
+        <button onclick="goToPage(9)" class="secondary">Next: Review & Export →</button>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 9: REVIEW & EXPORT ==================== -->
+    <div id="page9" class="section page">
+      <span class="current-step-badge">📍 STEP 5: Review & Export</span>
+      <h2>Review & Export Your Assignment</h2>
+      <span class="chinese-text">检查并导出您的作业</span>
+
+      <div class="notice-box success">
+        <div class="notice-title"><i class="fas fa-flag-checkered"></i> Almost Done!</div>
+        <p>Review your work against the checklist below, then export your completed assignment.</p>
+      </div>
+
+      <div class="section-tip">
+        <h3>✅ Final Checklist</h3>
+        <ul>
+          <li><strong>Anticipation Guide:</strong> Both Initial AND Final opinions completed</li>
+          <li><strong>Cover Page:</strong> Name, teacher, date, and creative title</li>
+          <li><strong>Part I Opinion Column:</strong> 600 words analyzing opinion changes</li>
+          <li><strong>Part II Academic Essay:</strong> 600 words on Malthus-Piketty spectrum</li>
+          <li><strong>Part III Cost-Benefit:</strong> All 4 tables completed with net assessments</li>
+          <li><strong>Formatting:</strong> Double-spaced, proofread, word count included</li>
+        </ul>
+      </div>
+
+      <div class="notice-box warning">
+        <div class="notice-title"><i class="fas fa-exclamation-triangle"></i> Before Submitting</div>
+        <ul>
+          <li>Proofread for spelling and grammar errors</li>
+          <li>Verify word counts (600 words each for Parts I & II)</li>
+          <li>Ensure your title is unique and insightful</li>
+          <li>Check that all tables have sufficient entries</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="goToPage(8)">← Back to Final Opinions</button>
+        <button onclick="togglePreview()" class="secondary"><i class="fas fa-eye"></i> Preview</button>
+        <button onclick="saveDocument()" style="background: linear-gradient(135deg, #4CAF50, #66bb6a); font-size: 18px; padding: 15px 30px;">
+          <i class="fas fa-download"></i> Export Document
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 CIA4U AOL #2 Planner. All rights reserved.</p>
+    <div class="motivation"></div>
+  </footer>
+
+  <script>
+    // Current page tracking
+    let currentPage = 1;
+    const totalPages = 9;
+
+    // Step mapping (which pages belong to which step)
+    const stepPages = {
+      1: [1, 2],      // Step 1: Welcome & Initial Opinions
+      2: [3],         // Step 2: Research
+      3: [4, 5, 6, 7], // Step 3: Writing
+      4: [8],         // Step 4: Final Opinions
+      5: [9]          // Step 5: Review & Export
+    };
+
+    // Navigation function
+    function goToPage(pageNumber) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      
+      // Show target page
+      const targetPage = document.getElementById('page' + pageNumber);
+      if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = pageNumber;
+      }
+      
+      // Update progress bar
+      updateProgress();
+      
+      // Update step indicator
+      updateStepIndicator();
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+      
+      // Save progress
+      saveProgress();
+    }
+
+    // Backwards compatibility
+    function nextPage(pageNumber) { goToPage(pageNumber); }
+    function prevPage(pageNumber) { goToPage(pageNumber); }
+
+    // Update progress bar
+    function updateProgress() {
+      const progress = (currentPage / totalPages) * 100;
+      const progressBar = document.querySelector('.progress');
+      if (progressBar) {
+        progressBar.style.width = `${progress}%`;
+      }
+    }
+
+    // Update step indicator
+    function updateStepIndicator() {
+      const steps = document.querySelectorAll('.step');
+      const connectors = document.querySelectorAll('.step-connector');
+      
+      // Find current step
+      let currentStep = 1;
+      for (let [step, pages] of Object.entries(stepPages)) {
+        if (pages.includes(currentPage)) {
+          currentStep = parseInt(step);
+          break;
+        }
+      }
+      
+      steps.forEach((step, index) => {
+        const stepNum = index + 1;
+        step.classList.remove('active', 'completed');
+        
+        if (stepNum < currentStep) {
+          step.classList.add('completed');
+        } else if (stepNum === currentStep) {
+          step.classList.add('active');
+        }
+      });
+      
+      connectors.forEach((connector, index) => {
+        connector.classList.remove('active');
+        if (index < currentStep - 1) {
+          connector.classList.add('active');
+        }
+      });
+    }
+
+    // Unlock final opinions
+    function unlockFinalOpinions() {
+      // Copy initial opinions to display
+      for (let i = 1; i <= 10; i++) {
+        const initialRadio = document.querySelector(`input[name="initial${i}"]:checked`);
+        const displayEl = document.getElementById(`initial${i}-display`);
+        if (displayEl && initialRadio) {
+          displayEl.textContent = initialRadio.value === 'agree' ? '✓ Agree' : '✗ Disagree';
+          displayEl.style.color = initialRadio.value === 'agree' ? '#4CAF50' : '#f44336';
+        }
+      }
+      
+      // Unlock containers on page 2 (if user returns)
+      for (let i = 1; i <= 10; i++) {
+        const container = document.getElementById(`final${i}-container`);
+        if (container) {
+          container.classList.remove('locked');
+          container.querySelectorAll('input').forEach(input => input.disabled = false);
+        }
+      }
+      
+      // Mark step 3 as complete
+      localStorage.setItem('aol2_step3_complete', 'true');
+    }
+
+    // Add row to table
+    function addRow(tableId) {
+      const table = document.getElementById(tableId);
+      if (!table) return;
+      
+      const newRow = table.insertRow(-1);
+      for (let i = 0; i < 8; i++) {
+        const cell = newRow.insertCell(i);
+        cell.contentEditable = "true";
+        cell.textContent = "";
+      }
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = "block";
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = "none";
+    }
+
+    // Preview toggle
+    function togglePreview() {
+      const pane = document.getElementById('previewPane');
+      if (pane.style.display === 'none' || pane.style.display === '') {
+        pane.style.display = 'block';
+        updatePreview();
+      } else {
+        pane.style.display = 'none';
+      }
+    }
+
+    // Update preview
+    function updatePreview() {
+      const previewContent = document.querySelector('.preview-content');
+      if (!previewContent) return;
+      
+      let preview = '<h4>Cover Page</h4>';
+      preview += `<p><strong>Student:</strong> ${document.getElementById('coverStudent')?.value || '-'}</p>`;
+      preview += `<p><strong>Title:</strong> ${document.getElementById('coverTitle')?.value || '-'}</p>`;
+      preview += '<h4>Part I: Opinion Column</h4>';
+      preview += `<p>${(document.getElementById('opinionIntro')?.value || '').substring(0, 100)}...</p>`;
+      preview += '<h4>Part II: Academic Essay</h4>';
+      preview += `<p>${(document.getElementById('academicIntro')?.value || '').substring(0, 100)}...</p>`;
+      
+      previewContent.innerHTML = preview;
+    }
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    }
+
+    // Spectrum drag functionality
+    function initializeSpectrumDrag() {
+      const marker = document.getElementById('spectrumMarker');
+      const spectrumLine = document.querySelector('.spectrum-line');
+      const positionInput = document.getElementById('spectrumPosition');
+      
+      if (!marker || !spectrumLine) return;
+
+      let isDragging = false;
+
+      const updateMarkerPosition = (clientX) => {
+        const rect = spectrumLine.getBoundingClientRect();
+        let position = ((clientX - rect.left) / rect.width) * 100;
+        position = Math.max(0, Math.min(100, position));
+        marker.style.left = position + '%';
+        if (positionInput) positionInput.value = position;
+      };
+
+      marker.addEventListener('mousedown', () => isDragging = true);
+      document.addEventListener('mousemove', (e) => { if (isDragging) updateMarkerPosition(e.clientX); });
+      document.addEventListener('mouseup', () => isDragging = false);
+      
+      marker.addEventListener('touchstart', () => isDragging = true);
+      document.addEventListener('touchmove', (e) => { if (isDragging) updateMarkerPosition(e.touches[0].clientX); });
+      document.addEventListener('touchend', () => isDragging = false);
+      
+      spectrumLine.addEventListener('click', (e) => updateMarkerPosition(e.clientX));
+    }
+
+    // Save progress to localStorage
+    function saveProgress() {
+      const data = {
+        currentPage: currentPage,
+        coverStudent: document.getElementById('coverStudent')?.value,
+        coverTitle: document.getElementById('coverTitle')?.value,
+        coverDate: document.getElementById('coverDate')?.value,
+        opinionIntro: document.getElementById('opinionIntro')?.value,
+        opinionStatement1: document.getElementById('opinionStatement1')?.value,
+        opinionStatement2: document.getElementById('opinionStatement2')?.value,
+        opinionStatement3: document.getElementById('opinionStatement3')?.value,
+        opinionConclusion: document.getElementById('opinionConclusion')?.value,
+        academicIntro: document.getElementById('academicIntro')?.value,
+        academicBody1: document.getElementById('academicBody1')?.value,
+        academicBody2: document.getElementById('academicBody2')?.value,
+        academicBody3: document.getElementById('academicBody3')?.value,
+        academicConclusion: document.getElementById('academicConclusion')?.value,
+        spectrumPosition: document.getElementById('spectrumPosition')?.value,
+        spectrumDescription: document.getElementById('spectrumDescription')?.value
+      };
+      
+      // Save initial opinions
+      for (let i = 1; i <= 10; i++) {
+        const checked = document.querySelector(`input[name="initial${i}"]:checked`);
+        data[`initial${i}`] = checked ? checked.value : null;
+      }
+      
+      // Save final opinions
+      for (let i = 1; i <= 10; i++) {
+        const checked = document.querySelector(`input[name="final${i}"]:checked`);
+        data[`final${i}`] = checked ? checked.value : null;
+      }
+      
+      localStorage.setItem('aol2_progress', JSON.stringify(data));
+    }
+
+    // Load progress from localStorage
+    function loadProgress() {
+      const saved = localStorage.getItem('aol2_progress');
+      if (!saved) return;
+      
+      try {
+        const data = JSON.parse(saved);
+        
+        if (data.coverStudent) document.getElementById('coverStudent').value = data.coverStudent;
+        if (data.coverTitle) document.getElementById('coverTitle').value = data.coverTitle;
+        if (data.coverDate) document.getElementById('coverDate').value = data.coverDate;
+        if (data.opinionIntro) document.getElementById('opinionIntro').value = data.opinionIntro;
+        if (data.opinionStatement1) document.getElementById('opinionStatement1').value = data.opinionStatement1;
+        if (data.opinionStatement2) document.getElementById('opinionStatement2').value = data.opinionStatement2;
+        if (data.opinionStatement3) document.getElementById('opinionStatement3').value = data.opinionStatement3;
+        if (data.opinionConclusion) document.getElementById('opinionConclusion').value = data.opinionConclusion;
+        if (data.academicIntro) document.getElementById('academicIntro').value = data.academicIntro;
+        if (data.academicBody1) document.getElementById('academicBody1').value = data.academicBody1;
+        if (data.academicBody2) document.getElementById('academicBody2').value = data.academicBody2;
+        if (data.academicBody3) document.getElementById('academicBody3').value = data.academicBody3;
+        if (data.academicConclusion) document.getElementById('academicConclusion').value = data.academicConclusion;
+        if (data.spectrumDescription) document.getElementById('spectrumDescription').value = data.spectrumDescription;
+        
+        // Load initial opinions
+        for (let i = 1; i <= 10; i++) {
+          if (data[`initial${i}`]) {
+            const radio = document.querySelector(`input[name="initial${i}"][value="${data[`initial${i}`]}"]`);
+            if (radio) radio.checked = true;
+          }
+        }
+        
+        // Load final opinions
+        for (let i = 1; i <= 10; i++) {
+          if (data[`final${i}`]) {
+            const radio = document.querySelector(`input[name="final${i}"][value="${data[`final${i}`]}"]`);
+            if (radio) radio.checked = true;
+          }
+        }
+        
+        // Set spectrum position
+        if (data.spectrumPosition) {
+          const marker = document.getElementById('spectrumMarker');
+          const input = document.getElementById('spectrumPosition');
+          if (marker) marker.style.left = data.spectrumPosition + '%';
+          if (input) input.value = data.spectrumPosition;
+        }
+        
+        // Check if step 3 was completed
+        if (localStorage.getItem('aol2_step3_complete') === 'true') {
+          unlockFinalOpinions();
+        }
+        
+      } catch (e) {
+        console.error('Error loading progress:', e);
+      }
+    }
+
+    // Export document
+    function saveDocument() {
+      // Trigger confetti
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
+      
+      // Gather all data
+      const studentName = document.getElementById('coverStudent')?.value || 'Student';
+      const title = document.getElementById('coverTitle')?.value || 'AOL #2 Assignment';
+      const date = document.getElementById('coverDate')?.value || new Date().toLocaleDateString();
+      
+      // Create document content
+      let content = `
+CIA4U AOL #2: ${title}
+Student: ${studentName}
+Teacher: Dr. Dan Zebeljan
+Date: ${date}
+Course: CIA4U-AOL2
+
+================================================================================
+ANTICIPATION GUIDE COMPARISON
+================================================================================
+
+`;
+      
+      // Add anticipation guide comparison
+      const statements = [
+        "Homelessness is a problem because people do not want to work...",
+        "Over 30,000 Canadians are homeless every day.",
+        "The cost of homelessness for Canada is minor.",
+        "Welfare is an effective way of helping the poor.",
+        "Economists do not agree on how to help the poor.",
+        "If the rich pay higher taxes, then there will be fewer jobs.",
+        "It is better for the economy if society does nothing for the poor.",
+        "The poor will always be poor and governments can't help.",
+        "Labour unions no longer help working Canadians.",
+        "The rich are getting richer and the poor are getting poorer."
+      ];
+      
+      for (let i = 1; i <= 10; i++) {
+        const initial = document.querySelector(`input[name="initial${i}"]:checked`);
+        const final = document.querySelector(`input[name="final${i}"]:checked`);
+        content += `${i}. ${statements[i-1]}\n`;
+        content += `   Initial: ${initial ? initial.value.toUpperCase() : 'Not answered'}\n`;
+        content += `   Final: ${final ? final.value.toUpperCase() : 'Not answered'}\n\n`;
+      }
+      
+      content += `
+================================================================================
+PART I: OPINION COLUMN (600 words)
+================================================================================
+
+Introduction:
+${document.getElementById('opinionIntro')?.value || '[Not completed]'}
+
+Statement Analysis:
+${document.getElementById('opinionStatement1')?.value || '[Not completed]'}
+
+${document.getElementById('opinionStatement2')?.value || ''}
+
+${document.getElementById('opinionStatement3')?.value || ''}
+
+Conclusion:
+${document.getElementById('opinionConclusion')?.value || '[Not completed]'}
+
+================================================================================
+PART II: ACADEMIC ESSAY (600 words)
+================================================================================
+
+Spectrum Position: ${document.getElementById('spectrumPosition')?.value || '50'}%
+Position Description: ${document.getElementById('spectrumDescription')?.value || '[Not provided]'}
+
+Introduction:
+${document.getElementById('academicIntro')?.value || '[Not completed]'}
+
+Body Paragraph 1:
+${document.getElementById('academicBody1')?.value || '[Not completed]'}
+
+Body Paragraph 2:
+${document.getElementById('academicBody2')?.value || ''}
+
+Body Paragraph 3:
+${document.getElementById('academicBody3')?.value || ''}
+
+Conclusion:
+${document.getElementById('academicConclusion')?.value || '[Not completed]'}
+
+================================================================================
+PART III: COST-BENEFIT ANALYSIS
+================================================================================
+
+[Tables exported separately - see attached tables]
+
+Net Assessments:
+- Tax System: ${document.getElementById('taxAssessment')?.value || '[Not provided]'}
+- Guaranteed Income: ${document.getElementById('incomeAssessment')?.value || '[Not provided]'}
+- Microcredit: ${document.getElementById('microcreditAssessment')?.value || '[Not provided]'}
+- Labour Unions: ${document.getElementById('unionAssessment')?.value || '[Not provided]'}
+
+================================================================================
+`;
+      
+      // Download as text file
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `AOL2_${studentName.replace(/\s+/g, '_')}_${date}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      // Mark as completed
+      localStorage.setItem('aol2_completed', 'true');
+      
+      // Show success message
+      alert('🎉 Congratulations! Your assignment has been exported!\n\nRemember to:\n1. Format it properly in Word\n2. Check word counts\n3. Proofread before submitting');
+    }
+
+    // Easter egg
+    function triggerRainbow() {
+      document.body.style.animation = 'none';
+      setTimeout(() => {
+        document.body.style.animation = 'gradientBG 2s ease infinite';
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+        }
+      }, 10);
+      setTimeout(() => {
+        document.body.style.animation = 'gradientBG 15s ease infinite';
+      }, 5000);
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load dark mode preference
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+      }
+      
+      // Set up dark mode toggle
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+      }
+      
+      // Initialize spectrum
+      initializeSpectrumDrag();
+      
+      // Load saved progress
+      loadProgress();
+      
+      // Update step indicator
+      updateStepIndicator();
+      updateProgress();
+      
+      // Auto-save on input
+      document.querySelectorAll('input, textarea').forEach(el => {
+        el.addEventListener('input', saveProgress);
+        el.addEventListener('change', saveProgress);
+      });
+      
+      // Close modal on outside click
+      window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+          event.target.style.display = "none";
+        }
+      };
+    });
+  </script>
+</body>
+
+</html>
